@@ -1,3 +1,45 @@
+<?php
+session_start();
+if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
+
+if (isset($_GET['del_cart']) && $_GET['del_cart'] == 1) {
+  unset($_SESSION['cart']);
+  header('Location: cart.php');
+}
+
+if (isset($_GET['del_id']) && $_GET['del_id'] >= 0) {
+  array_splice($_SESSION['cart'], $_GET['del_id'], 1);
+  header('Location: cart.php');
+}
+
+if (isset($_POST['add_cart']) && ($_POST['add_cart'])) {
+  $productId = $_POST['productId'];
+  $productImage = $_POST['productImage'];
+  $productName = $_POST['productName'];
+  $productPrice = $_POST['productPrice'];
+  $productQuantity = $_POST['productQuantity'];
+
+  // Check product session
+  $check = 0;
+
+  for ($i = 0; $i < sizeof($_SESSION['cart']); $i++) {
+    if ($_SESSION['cart'][$i][4] == $productId) {
+      $check = 1;
+      $Quantity_new = $productQuantity + $_SESSION['cart'][$i][3];
+      $_SESSION['cart'][$i][3] = $Quantity_new;
+      break;
+    }
+  }
+
+  // Add product to session
+  if ($check == 0) {
+    $product = [$productImage, $productName, $productPrice, $productQuantity, $productId];
+    $_SESSION['cart'][] = $product;
+  }
+  // var_dump($_SESSION['cart']);
+}
+
+?>
 <!-- Start Main Top -->
 <!-- <div class="main-top">
   <div class="container-fluid">
@@ -87,7 +129,7 @@
             <a href="shop.php" class="nav-link dropdown-toggle arrow" data-toggle="dropdown">MENU</a>
             <ul class="dropdown-menu">
               <li><a href="shop.php">Sidebar Shop</a></li>
-              <li><a href="shop-detail.php">Shop Detail</a></li>
+              <!-- <li><a href="shop-detail.php">Shop Detail</a></li> -->
               <li><a href="cart.php">Cart</a></li>
               <li><a href="checkout.php">Checkout</a></li>
               <li><a href="my-account.php">My Account</a></li>
@@ -107,7 +149,7 @@
           <li class="side-menu">
             <a href="#">
               <i class="fa fa-shopping-bag"></i>
-              <span class="badge">3</span>
+              <span class="badge">~</span>
               <p>My Cart</p>
             </a>
           </li>
@@ -118,29 +160,39 @@
     <!-- Start Side Menu -->
     <div class="side">
       <a href="#" class="close-side"><i class="fa fa-times"></i></a>
-      <li class="cart-box">
-        <ul class="cart-list">
-          <li>
-            <a href="#" class="photo"><img src="images/img-pro-01.jpg" class="cart-thumb" alt=""></a>
-            <h6><a href="#">Delica omtantur </a></h6>
-            <p>1x - <span class="price">$80.00</span></p>
-          </li>
-          <li>
-            <a href="#" class="photo"><img src="images/img-pro-02.jpg" class="cart-thumb" alt="" /></a>
-            <h6><a href="#">Omnes ocurreret</a></h6>
-            <p>1x - <span class="price">$60.00</span></p>
-          </li>
-          <li>
-            <a href="#" class="photo"><img src="images/img-pro-03.jpg" class="cart-thumb" alt="" /></a>
-            <h6><a href="#">Agam facilisis</a></h6>
-            <p>1x - <span class="price">$40.00</span></p>
-          </li>
-          <li class="total">
-            <a href="#" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
-            <span class="float-right"><strong>Total</strong>: $180.00</span>
-          </li>
-        </ul>
-      </li>
+      <?php
+      if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
+        $subtotal = 0;
+      ?>
+        <li class="cart-box">
+          <ul class="cart-list">
+            <?php if (isset($_SESSION['cart']) && $_SESSION['cart']) { ?>
+              <?php
+              for ($i = 0; $i < sizeof($_SESSION['cart']); $i++) {
+                $total = $_SESSION['cart'][$i][2] * $_SESSION['cart'][$i][3];
+                $subtotal += $total;
+              ?>
+                <li>
+                  <a href="#" class="photo"><img src="../admin/img/Coffee/<?= $_SESSION['cart'][$i][0] ?>" class="cart-thumb" alt=""></a>
+                  <h6><a href="#"><?= $_SESSION['cart'][$i][1] ?> </a></h6>
+                  <p><?= $_SESSION['cart'][$i][3] ?>x - <span class="price"><?= $_SESSION['cart'][$i][2] ?> VNĐ</span></p>
+                </li>
+
+              <?php } ?>
+              <li class="total">
+                <a href="cart.php" class="btn btn-default hvr-hover btn-cart">VIEW CART</a>
+                <span class="float-right"><strong>Total</strong>: <?= number_format($subtotal, 0, '', ',') ?> VNĐ</span>
+              </li>
+            <?php } else { ?>
+              <tr>
+                <li>
+                  <h2>Your cart is empty!!!</h2>
+                </li>
+              </tr>
+            <?php } ?>
+          </ul>
+        </li>
+      <?php } ?>
     </div>
     <!-- End Side Menu -->
   </nav>
@@ -153,7 +205,9 @@
   <div class="container">
     <div class="input-group">
       <span class="input-group-addon"><i class="fa fa-search"></i></span>
-      <input type="text" class="form-control" placeholder="Search">
+      <form style="width: 85%;" action="search.php" method="post">
+      <input type="text" name="search" class="form-control" placeholder="Search">
+      </form>
       <span class="input-group-addon close-search"><i class="fa fa-times"></i></span>
     </div>
   </div>

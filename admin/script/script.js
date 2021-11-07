@@ -88,3 +88,15 @@ function confirmUpdate(target,mats){
     form.submit();
   }
 }
+
+function confirmDelete (target, mats) {
+  result = confirm("Do you want to delete product "+ mats +" information?");
+  if (result == true) {
+    form = target.parentElement;
+    input = document.createElement("input");
+    input.type = 'hidden';
+    input.name = 'delete';
+    form.appendChild(input);
+    form.submit();
+  }
+}

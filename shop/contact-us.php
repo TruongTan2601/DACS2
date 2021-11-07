@@ -3,35 +3,7 @@
 <!-- Basic -->
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-  <!-- Mobile Metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Site Metas -->
-  <title>ThewayShop - Ecommerce Bootstrap 4 HTML Template</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <!-- Site Icons -->
-  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <!-- Site CSS -->
-  <link rel="stylesheet" href="css/style.css">
-  <!-- Responsive CSS -->
-  <link rel="stylesheet" href="css/responsive.css">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/custom.css">
-
-  <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+<?php require 'modules/head.php' ?>
 
 </head>
 
@@ -118,6 +90,9 @@
     </div>
   </div>
   <!-- End Cart -->
+  <div class="map">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3834.1946846050646!2d108.23945511531181!3d16.055384044072383!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31421768bb9e4929%3A0x9c177710e203930d!2sTre%20Coffee!5e0!3m2!1svi!2s!4v1632647405766!5m2!1svi!2s" width="100%" height="600" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+  </div>
 
   <!-- Start Instagram Feed  -->
   <div class="instagram-box">

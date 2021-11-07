@@ -6,9 +6,10 @@ if (isset($_POST['submit'])) {
   $pname = $_POST['pname'];
   $pcate = $_POST['pcate'];
   $pquan = $_POST['pquan'];
+  $pprice = $_POST['pprice'];
 
   $pimg = $_FILES['pimg']['name'];
-  $target_dir = "img/";
+  $target_dir = "img/Coffee/";
   $target_file = $target_dir . basename($pimg);
   $pimg_tmp = $_FILES['pimg']['tmp_name'];
 
@@ -17,7 +18,8 @@ if (isset($_POST['submit'])) {
   $tbl_product = DB::table("tbl_product")->insert([
     'productName' => "$pname",
     'brandId' => "$pcate",
-    'productQuantity' => "$pquan",
+    'productPrice' => "$pprice",
+    'productCurrentstatus' => "$pquan",
     'productImage' => "$pimg",
     'productDescription' => "$pdetail"
   ]);
@@ -33,27 +35,39 @@ $tbl_product = DB::table("tbl_product")->get();
 $productS = null;
 if (isset($_POST['update'])) {
   $productId = $_POST['productId'];
-  $productS = DB::table('tbl_product')->find('productId',$productId);
+  $productS = DB::table('tbl_product')->find('productId', $productId);
   // var_dump($productS);
 }
 
 if (isset($_POST['change'])) {
   $productId = $_POST['productId'];
-  
-  $tbl_product_update = DB::table("tbl_product")->find('productId',$productId)->update([
-    'productName' => $productS->input('productName'),
-    'productImage' => $productS->input('productImage'),
-    'productPrice' => $productS->input('productPrice'),
-    'productQuantity' => $productS->input('productQuantity'),
-    'productDescription' => $productS->input('productDescription')
+  $productName = $_POST['productName'];
+  $productImage = $_POST['productImage'];
+  $productPrice = $_POST['productPrice'];
+  $productCurrentstatus = $_POST['productCurrentstatus'];
+  $productDescription = $_POST['productDescription'];
+
+  $tbl_product_update = DB::table("tbl_product")->where('productId', $productId)->update([
+    'productName' => $productName,
+    'productImage' => $productImage,
+    'productPrice' => $productPrice,
+    'productCurrentstatus' => $productCurrentstatus,
+    'productDescription' => $productDescription
   ]);
-  
+  header('Location: uploadproduct.php');
+}
+
+if (isset($_POST['delete'])) {
+  $productId = $_POST['productId'];
+  $delete = DB::table('tbl_product')->where('productId', $productId)->delete();
+  header('Location: uploadproduct.php');
 }
 
 ?>
 <!DOCTYPE html>
 <!-- Created by CodingLab |www.youtube.com/CodingLabYT-->
 <html lang="en" dir="ltr">
+
 
 <head>
   <meta charset="UTF-8">
@@ -150,9 +164,9 @@ if (isset($_POST['change'])) {
                   <th>Name</th>
                   <th>Image</th>
                   <th>Price</th>
-                  <th>Quantity</th>
                   <th>Description</th>
                   <th>Brand</th>
+                  <th>Current status</th>
                   <th>Option</th>
                 </tr>
               </thead>
@@ -161,9 +175,9 @@ if (isset($_POST['change'])) {
                   <th>Name</th>
                   <th>Image</th>
                   <th>Price</th>
-                  <th>Quantity</th>
                   <th>Description</th>
                   <th>Brand</th>
+                  <th>Current status</th>
                   <th>Option</th>
                 </tr>
               </tfoot>
@@ -173,13 +187,13 @@ if (isset($_POST['change'])) {
                     <td><?= $row["productName"] ?></td>
                     <td><img width="100px" src="img/Coffee/<?= $row["productImage"] ?>" alt=""></td>
                     <td><?= number_format($row["productPrice"], 0, '', ',') ?></td>
-                    <td><?= $row["productQuantity"] ?></td>
                     <td><?= $row["productDescription"] ?></td>
-                    <td><?= $row["brandId"] ?></td>
+                    <td><?= $row["brandID"] ?></td>
+                    <td><b><?= $row["productCurrentstatus"] ?></b></td>
                     <td>
                       <form id="<?= $row['productId'] ?>" method="POST">
                         <input type="hidden" name="productId" value="<?= $row['productId'] ?>">
-                        <button style="background-color: #fff; border: none;" type="submit" name="delete"><i class="fas fa-trash-alt"></i></button>
+                        <button style="background-color: #fff; border: none;" type="button" name="delete" onclick="confirmDelete(this, '<?= $row['productId'] ?>');"><i class="fas fa-trash-alt"></i></button>
                         <button style="background-color: #fff; border: none;" type="submit" name="update"><i class="fas fa-user-cog"></i> </button>
                       </form>
                     </td>
@@ -214,8 +228,8 @@ if (isset($_POST['change'])) {
                 <input type="number" name="productPrice" min="1000" value="<?= $productS['productPrice'] ?>">
               </div>
               <div class="form-item">
-                <p>Quantity</p>
-                <input type="number" name="productQuantity" min="0" value="<?= $productS['productQuantity'] ?>">
+                <p>Current status</p>
+                <input type="text" name="productCurrentstatus" value="<?= $productS['productCurrentstatus'] ?>">
               </div>
               <br />
               <div class="form-item">
@@ -224,7 +238,7 @@ if (isset($_POST['change'])) {
               </div>
               <br />
               <div class="form-item">
-                <button type="submit" name="change" onclick="confirmUpdate(this, '<?= $row['productId'] ?>')">Sửa</button>
+                <button type="submit" name="change">Sửa</button>
               </div>
             </form>
           </div>
@@ -246,10 +260,10 @@ if (isset($_POST['change'])) {
           <div class="form-group">
             <label for="pcate">Brand:</label>
             <select class="form-control" name="pcate" id="pcate">
-              <option value="T_Cf">T_Cf</option>
-              <option value="I_Cf">I_Cf</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
+              <option value="CoffeeViet">CoffeeViet</option>
+              <option value="ItaliaCoffee">ItaliaCoffee</option>
+              <option value="SugarcaneJuice">SugarcaneJuice</option>
+              <option value="Yogurt">Yogurt</option>
               <option value="5">5</option>
             </select>
             <!-- <input type="text" class="form-control" id="pcate" placeholder="Enter category" name="pcate" required> -->
@@ -257,8 +271,18 @@ if (isset($_POST['change'])) {
             <div class="invalid-feedback">Please fill out this field.</div>
           </div>
           <div class="form-group">
-            <label for="pquan">Quantity:</label>
-            <input type="number" class="form-control" id="pquan" placeholder="Enter quantity" name="pquan" required>
+            <label for="pprice">Price:</label>
+            <input type="number" class="form-control" id="pprice" name="pprice" min="1000" value="1000" required>
+            <!-- <input type="text" class="form-control" id="pcate" placeholder="Enter category" name="pcate" required> -->
+            <div class="valid-feedback">Valid.</div>
+            <div class="invalid-feedback">Please fill out this field.</div>
+          </div>
+          <div class="form-group">
+            <label for="pquan">Current status:</label>
+            <select class="form-control" name="pquan" id="pquan">
+              <option value="NEW">NEW</option>
+              <option value="SALE">SALE</option>
+            </select>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
           </div>

@@ -5,3 +5,7 @@ function showstaffsign() {
 function showupload() {
     document.querySelector('.uploadpro').classList.toggle('hidden');
 }
+
+function show_instagram() {
+    document.querySelector('.show_instagram').classList.toggle('hidden');
+}

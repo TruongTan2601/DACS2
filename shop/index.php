@@ -1,6 +1,7 @@
 <?php require '../admin/connect.php';
 
 $tbl_banner = DB::table('tbl_banner')->get();
+$tbl_blogs = DB::table('tbl_blogs')->get();
 ?>
 
 <!DOCTYPE html>
@@ -8,35 +9,7 @@ $tbl_banner = DB::table('tbl_banner')->get();
 <!-- Basic -->
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-  <!-- Mobile Metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Site Metas -->
-  <title>TRE COFFEE</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <!-- Site Icons -->
-  <link rel="shortcut icon" href="images/logotre.jpg" type="image/x-icon">
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <!-- Site CSS -->
-  <link rel="stylesheet" href="css/style.css">
-  <!-- Responsive CSS -->
-  <link rel="stylesheet" href="css/responsive.css">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/custom.css">
-
-  <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <?php require 'modules/head.php' ?>
 
 </head>
 
@@ -48,7 +21,7 @@ $tbl_banner = DB::table('tbl_banner')->get();
     <ul class="slides-container">
       <?php foreach($tbl_banner as $row) { ?>
       <li class="text-center">
-        <img src="images/Banner/<?= $row['bannerImage'] ?>" alt="">
+        <img src="../admin/img/Banner/<?= $row['bannerImage'] ?>" alt="">
         <div class="container">
           <div class="row">
             <div class="col-md-12">
@@ -118,7 +91,7 @@ $tbl_banner = DB::table('tbl_banner')->get();
       <div class="row">
         <div class="col-lg-12">
           <div class="title-all text-center">
-            <h1>Fruits & Vegetables</h1>
+            <h1>Coffee & Drinking Water</h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.</p>
           </div>
         </div>
@@ -142,7 +115,7 @@ $tbl_banner = DB::table('tbl_banner')->get();
               <div class="type-lb">
                 <p class="sale">Sale</p>
               </div>
-              <img src="images/img-pro-01.jpg" class="img-fluid" alt="Image">
+              <img src="images/Coffee/moca.jpg" class="img-fluid" alt="Image">
               <div class="mask-icon">
                 <ul>
                   <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
@@ -165,7 +138,7 @@ $tbl_banner = DB::table('tbl_banner')->get();
               <div class="type-lb">
                 <p class="new">New</p>
               </div>
-              <img src="images/img-pro-02.jpg" class="img-fluid" alt="Image">
+              <img src="images/Coffee/capi.jpg" class="img-fluid" alt="Image">
               <div class="mask-icon">
                 <ul>
                   <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
@@ -188,7 +161,7 @@ $tbl_banner = DB::table('tbl_banner')->get();
               <div class="type-lb">
                 <p class="sale">Sale</p>
               </div>
-              <img src="images/img-pro-03.jpg" class="img-fluid" alt="Image">
+              <img src="images/Coffee/capi.jpg" class="img-fluid" alt="Image">
               <div class="mask-icon">
                 <ul>
                   <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
@@ -211,7 +184,7 @@ $tbl_banner = DB::table('tbl_banner')->get();
               <div class="type-lb">
                 <p class="sale">Sale</p>
               </div>
-              <img src="images/img-pro-04.jpg" class="img-fluid" alt="Image">
+              <img src="images/Coffee/milk.jpg" class="img-fluid" alt="Image">
               <div class="mask-icon">
                 <ul>
                   <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
@@ -238,34 +211,36 @@ $tbl_banner = DB::table('tbl_banner')->get();
       <div class="row">
         <div class="col-lg-12">
           <div class="title-all text-center">
-            <h1>latest blog</h1>
+            <h1>Blogs</h1>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet lacus enim.</p>
           </div>
         </div>
       </div>
       <div class="row">
+      <?php foreach($tbl_blogs as $row) { ?>
         <div class="col-md-6 col-lg-4 col-xl-4">
           <div class="blog-box">
             <div class="blog-img">
-              <img class="img-fluid" src="images/blog-img.jpg" alt="" />
+              <img class="img-fluid" src="../img/Blogs/<?= $row['blogImage'] ?>" alt="" />
             </div>
             <div class="blog-content">
               <div class="title-blog">
-                <h3>Fusce in augue non nisi fringilla</h3>
-                <p>Nulla ut urna egestas, porta libero id, suscipit orci. Quisque in lectus sit amet urna dignissim feugiat. Mauris molestie egestas pharetra. Ut finibus cursus nunc sed mollis. Praesent laoreet lacinia elit id lobortis.</p>
+                <h3><?= $row['blogName'] ?></h3>
+                <p><?= $row['blogDemo'] ?></p>
               </div>
               <ul class="option-blog">
                 <li><a href="#"><i class="far fa-heart"></i></a></li>
-                <li><a href="#"><i class="fas fa-eye"></i></a></li>
+                <li><a href="blog-detail.php?id=<?= $row['blogId'] ?>"><i class="fas fa-eye"></i></a></li>
                 <li><a href="#"><i class="far fa-comments"></i></a></li>
               </ul>
             </div>
           </div>
         </div>
+        <?php }?>
         <div class="col-md-6 col-lg-4 col-xl-4">
           <div class="blog-box">
             <div class="blog-img">
-              <img class="img-fluid" src="images/blog-img-01.jpg" alt="" />
+              <img class="img-fluid" src="../img/Blogs/blogs2.jpg" alt="" />
             </div>
             <div class="blog-content">
               <div class="title-blog">

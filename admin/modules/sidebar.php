@@ -61,6 +61,13 @@
       <span class="tooltip">Saved</span>
     </li>
     <li>
+      <a href="image.php">
+        <i class="bx bx-image"></i>
+        <span class="links_name">Image</span>
+      </a>
+      <span class="tooltip">Image</span>
+    </li>
+    <li>
       <a href="#">
         <i class="bx bx-cog"></i>
         <span class="links_name">Setting</span>

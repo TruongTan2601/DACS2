@@ -3,35 +3,7 @@
 <!-- Basic -->
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-  <!-- Mobile Metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Site Metas -->
-  <title>Freshshop - Ecommerce Bootstrap 4 HTML Template</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <!-- Site Icons -->
-  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <!-- Site CSS -->
-  <link rel="stylesheet" href="css/style.css">
-  <!-- Responsive CSS -->
-  <link rel="stylesheet" href="css/responsive.css">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/custom.css">
-
-  <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <?php require 'modules/head.php' ?>
 
 </head>
 
@@ -57,13 +29,20 @@
   <!-- Start About Page  -->
   <div class="about-box-main">
     <div class="container">
+      <?php $read = file('../admin/txt/a.txt');
+      foreach ($read as $line) {
+        echo '<p style="text-indent: 20px;text-align: justify;">'.$line .'</p>';
+        }
+
+      ?>
+      
       <div class="row">
         <div class="col-lg-6">
           <div class="banner-frame"> <img class="img-fluid" src="images/about-img.jpg" alt="" />
           </div>
         </div>
         <div class="col-lg-6">
-          <h2 class="noo-sh-title-top">We are <span>Freshshop</span></h2>
+          <h2 class="noo-sh-title-top">We are <span>Tre - Coffee</span></h2>
           <p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam
             voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit,
             sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?

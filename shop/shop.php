@@ -11,35 +11,7 @@ $tbl_img_ig = DB::table('tbl_img_ig')->get();
 <!-- Basic -->
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-  <!-- Mobile Metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Site Metas -->
-  <title>Freshshop - Ecommerce Bootstrap 4 HTML Template</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <!-- Site Icons -->
-  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <!-- Site CSS -->
-  <link rel="stylesheet" href="css/style.css">
-  <!-- Responsive CSS -->
-  <link rel="stylesheet" href="css/responsive.css">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/custom.css">
-
-  <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+<?php require 'modules/head.php' ?>
 
 </head>
 
@@ -112,10 +84,10 @@ $tbl_img_ig = DB::table('tbl_img_ig')->get();
                               <div class="type-lb">
                                 <p class="sale"><?= $row["productCurrentstatus"] ?></p>
                               </div>
-                              <img src="images/Coffee/<?= $row["productImage"] ?>" class="img-fluid" alt="Image">
+                              <img src="../admin/img/Coffee/<?= $row["productImage"] ?>" class="img-fluid" alt="Image">
                               <div class="mask-icon">
                                 <ul>
-                                  <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                  <li><a href="shop-detail.php?id=<?= $row['productId'] ?>" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
                                   <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
                                   <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
                                 </ul>
@@ -124,7 +96,7 @@ $tbl_img_ig = DB::table('tbl_img_ig')->get();
                               </div>
                             </div>
                             <div class="why-text">
-                              <h4><?= $row["productName"] ?></h4>
+                              <h4><a href="shop-detail.php?id=<?= $row['productId'] ?>"><?= $row["productName"] ?></a></h4>
                               <h5><?= number_format($row["productPrice"], 0, '', ',') ?> VNĐ</h5>
                             </div>
                           </div>
@@ -143,7 +115,7 @@ $tbl_img_ig = DB::table('tbl_img_ig')->get();
                               <div class="type-lb">
                                 <p class="new"><?= $row["productCurrentstatus"] ?></p>
                               </div>
-                              <img src="images/Coffee/<?= $row["productImage"] ?>" class="img-fluid" alt="Image">
+                              <img src="../admin/img/Coffee/<?= $row["productImage"] ?>" class="img-fluid" alt="Image">
                               <div class="mask-icon">
                                 <ul>
                                   <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
@@ -185,36 +157,32 @@ $tbl_img_ig = DB::table('tbl_img_ig')->get();
               </div>
               <div class="list-group list-group-collapse list-group-sm list-group-tree" id="list-group-men" data-children=".sub-men">
                 <div class="list-group-collapse sub-men">
-                  <a class="list-group-item list-group-item-action" href="#sub-men1" data-toggle="collapse" aria-expanded="true" aria-controls="sub-men1">Fruits & Drinks <small class="text-muted">(100)</small>
+                  <a class="list-group-item list-group-item-action" href="#sub-men1" data-toggle="collapse" aria-expanded="true" aria-controls="sub-men1">Coffee<small class="text-muted">(10)</small>
                   </a>
                   <div class="collapse show" id="sub-men1" data-parent="#list-group-men">
                     <div class="list-group">
-                      <a href="#" class="list-group-item list-group-item-action active">Fruits 1 <small class="text-muted">(50)</small></a>
-                      <a href="#" class="list-group-item list-group-item-action">Fruits 2 <small class="text-muted">(10)</small></a>
-                      <a href="#" class="list-group-item list-group-item-action">Fruits 3 <small class="text-muted">(10)</small></a>
-                      <a href="#" class="list-group-item list-group-item-action">Fruits 4 <small class="text-muted">(10)</small></a>
-                      <a href="#" class="list-group-item list-group-item-action">Fruits 5 <small class="text-muted">(20)</small></a>
+                      <a href="#" class="list-group-item list-group-item-action active">Coffee Vietnam <small class="text-muted">(5)</small></a>
+                      <a href="#" class="list-group-item list-group-item-action">Coffee Italia <small class="text-muted">(5)</small></a>
                     </div>
                   </div>
                 </div>
                 <div class="list-group-collapse sub-men">
-                  <a class="list-group-item list-group-item-action" href="#sub-men2" data-toggle="collapse" aria-expanded="false" aria-controls="sub-men2">Vegetables
-                    <small class="text-muted">(50)</small>
+                  <a class="list-group-item list-group-item-action" href="#sub-men2" data-toggle="collapse" aria-expanded="false" aria-controls="sub-men2">Juices
+                    <small class="text-muted">(8)</small>
                   </a>
                   <div class="collapse" id="sub-men2" data-parent="#list-group-men">
                     <div class="list-group">
-                      <a href="#" class="list-group-item list-group-item-action">Vegetables 1 <small class="text-muted">(10)</small></a>
-                      <a href="#" class="list-group-item list-group-item-action">Vegetables 2 <small class="text-muted">(20)</small></a>
-                      <a href="#" class="list-group-item list-group-item-action">Vegetables 3 <small class="text-muted">(20)</small></a>
+                      <a href="#" class="list-group-item list-group-item-action">Juice <small class="text-muted">(10)</small></a>
+                      <a href="#" class="list-group-item list-group-item-action">Juices <small class="text-muted">(20)</small></a>
                     </div>
                   </div>
                 </div>
-                <a href="#" class="list-group-item list-group-item-action"> Grocery <small class="text-muted">(150) </small></a>
-                <a href="#" class="list-group-item list-group-item-action"> Grocery <small class="text-muted">(11)</small></a>
-                <a href="#" class="list-group-item list-group-item-action"> Grocery <small class="text-muted">(22)</small></a>
+                <a href="#" class="list-group-item list-group-item-action"> Vitamin <small class="text-muted">(5) </small></a>
+                <a href="#" class="list-group-item list-group-item-action"> Tea <small class="text-muted">(6)</small></a>
+                <a href="#" class="list-group-item list-group-item-action"> Yogurts <small class="text-muted">(5)</small></a>
               </div>
             </div>
-            <div class="filter-price-left">
+            <!-- <div class="filter-price-left">
               <div class="title-left">
                 <h3>Price</h3>
               </div>
@@ -225,7 +193,7 @@ $tbl_img_ig = DB::table('tbl_img_ig')->get();
                   <button class="btn hvr-hover" type="submit">Filter</button>
                 </p>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>

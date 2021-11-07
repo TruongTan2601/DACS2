@@ -1,83 +1,9 @@
-<?php
-require '../admin/connect.php';
-session_start();
-if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
-
-if (isset($_GET['del_cart']) && $_GET['del_cart'] == 1) {
-  unset($_SESSION['cart']);
-  header('Location: cart.php');
-}
-
-if (isset($_GET['del_id']) && $_GET['del_id'] >= 0) {
-  array_splice($_SESSION['cart'], $_GET['del_id'], 1);
-  header('Location: cart.php');
-}
-
-if (isset($_POST['add_cart']) && ($_POST['add_cart'])) {
-  $productId = $_POST['productId'];
-  $productImage = $_POST['productImage'];
-  $productName = $_POST['productName'];
-  $productPrice = $_POST['productPrice'];
-  $productQuantity = $_POST['productQuantity'];
-
-  // Check product session
-  $check = 0;
-
-  for ($i = 0; $i < sizeof($_SESSION['cart']); $i++) {
-    if ($_SESSION['cart'][$i][4] == $productId) {
-      $check = 1;
-      $Quantity_new = $productQuantity + $_SESSION['cart'][$i][3];
-      $_SESSION['cart'][$i][3] = $Quantity_new;
-      break;
-    }
-  }
-
-  // Add product to session
-  if ($check == 0) {
-    $product = [$productImage, $productName, $productPrice, $productQuantity, $productId];
-    $_SESSION['cart'][] = $product;
-  }
-  // var_dump($_SESSION['cart']);
-}
-
-
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <!-- Basic -->
 
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-  <!-- Mobile Metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Site Metas -->
-  <title>ThewayShop - Ecommerce Bootstrap 4 HTML Template</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <!-- Site Icons -->
-  <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <!-- Site CSS -->
-  <link rel="stylesheet" href="css/style.css">
-  <!-- Responsive CSS -->
-  <link rel="stylesheet" href="css/responsive.css">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="css/custom.css">
-
-  <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <?php require 'modules/head.php' ?>
 
 </head>
 
@@ -133,11 +59,11 @@ if (isset($_POST['add_cart']) && ($_POST['add_cart'])) {
                         <td><?= $i + 1 ?></td>
                         <td class="thumbnail-img">
                           <a href="#">
-                            <img class="img-fluid" src="images/Coffee/<?= $_SESSION['cart'][$i][0] ?>" alt="" />
+                            <img class="img-fluid" src="../admin/img/Coffee/<?= $_SESSION['cart'][$i][0] ?>" alt="" />
                           </a>
                         </td>
                         <td class="name-pr">
-                          <a href="#">
+                          <a href="shop-detail.php?id=<?= $_SESSION['cart'][$i][4] ?>">
                             <?= $_SESSION['cart'][$i][1] ?>
                           </a>
                         </td>
@@ -224,7 +150,7 @@ if (isset($_POST['add_cart']) && ($_POST['add_cart'])) {
               <hr>
             </div>
           </div>
-          <div class="col-12 d-flex shopping-box"><a href="checkout.html" class="ml-auto btn hvr-hover">Checkout</a> </div>
+          <div class="col-12 d-flex shopping-box"><a href="checkout.php" class="ml-auto btn hvr-hover">Checkout</a> </div>
         </div>
       <?php } ?>
     </div>
