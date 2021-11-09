@@ -38,7 +38,7 @@ if (isset($_POST['add_cart']) && ($_POST['add_cart'])) {
   }
   // var_dump($_SESSION['cart']);
 }
-
+// session_unset();
 ?>
 <!-- Start Main Top -->
 <!-- <div class="main-top">

@@ -280,6 +280,7 @@ if (isset($_POST['delete'])) {
           <div class="form-group">
             <label for="pquan">Current status:</label>
             <select class="form-control" name="pquan" id="pquan">
+            <option value=""></option>
               <option value="NEW">NEW</option>
               <option value="SALE">SALE</option>
             </select>

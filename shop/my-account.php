@@ -1,3 +1,8 @@
+<?php
+	// require '../admin/connect.php';
+  echo $login_check;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <!-- Basic -->
@@ -48,7 +53,7 @@
             <div class="account-box">
               <div class="service-box">
                 <div class="service-icon">
-                  <a href="#"><i class="fa fa-lock"></i> </a>
+                  <a href="login.php"><i class="fa fa-lock"></i> </a>
                 </div>
                 <div class="service-desc">
                   <h4>Login &amp; security</h4>

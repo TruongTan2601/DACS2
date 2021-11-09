@@ -1,7 +1,8 @@
-<?php 
+<?php
 require '../admin/connect.php';
 $blogId = $_GET['id'];
-$tbl_blogs = DB::table('tbl_blogs')->find('blogId',$blogId);
+$tbl_blogs = DB::table('tbl_blogs')->find('blogId', $blogId);
+$tbl_blog = DB::table('tbl_blogs')->get();
 // var_dump($tbl_blogs);
 
 ?>
@@ -10,11 +11,11 @@ $tbl_blogs = DB::table('tbl_blogs')->find('blogId',$blogId);
 <html lang="en">
 
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<!-- Mobile Metas -->
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Revetive - Free Business Corporate Template By MACode ID</title>
 
@@ -51,7 +52,7 @@ $tbl_blogs = DB::table('tbl_blogs')->find('blogId',$blogId);
           <div class="col-lg-8">
             <div class="blog-single-wrap">
               <div class="post-thumbnail">
-                <img src="../assets/img/bg_image_1.jpg" alt="">
+                <img src="../admin/img/Blogs/<?= $tbl_blogs['blogImage'] ?>" alt="">
               </div>
               <h1 class="post-title"><?= $tbl_blogs['blogName'] ?></h1>
               <div class="post-meta">
@@ -72,16 +73,13 @@ $tbl_blogs = DB::table('tbl_blogs')->find('blogId',$blogId);
                 </div>
               </div>
               <div class="post-content">
-                <?php 
-                $s = 'Blog1.txt';
-                $f = '../admin/txt/Blog1.txt';
-                $read = file($f);
-                
-                foreach ($read as $line) {
-                  echo '<p style="text-indent: 20px;text-align: justify;font-size: 17px;">'.$line .'</p>';
-                  }
-                ?>
-                
+                <?php $read = file("../admin/txt/".$tbl_blogs['blogDescription']); ?>
+
+                <?php foreach ($read as $line) { ?>
+                  <p style="text-indent: 20px;text-align: justify;font-size: 17px;"><?= $line ?></p>
+                <?php } ?>
+
+
                 <div class="post-tags">
                   <p class="mb-2">Tags:</p>
                   <a href="#" class="tag-link">LifeStyle</a>
@@ -127,36 +125,18 @@ $tbl_blogs = DB::table('tbl_blogs')->find('blogId',$blogId);
               <div class="widget-box">
                 <h3 class="widget-title">Recent Blog</h3>
                 <div class="divider"></div>
+                <?php foreach($tbl_blog as $row){ ?>
                 <div class="blog-item">
                   <div class="content">
-                    <h6 class="post-title"><a href="#">Even the all-powerful Pointing has no control</a></h6>
+                    <h6 class="post-title"><a href="blog-detail.php?id=<?= $row['blogId'] ?>"><?= $row['blogName'] ?></a></h6>
                     <div class="meta">
-                      <a href="#"><span class="mai-calendar"></span> July 12, 2018</a>
+                      <a href="#"><span class="mai-calendar"></span> <?= $row['blogUpDate'] ?></a>
                       <a href="#"><span class="mai-person"></span> Admin</a>
-                      <a href="#"><span class="mai-chatbubbles"></span> 19</a>
+                      <!-- <a href="#"><span class="mai-chatbubbles"></span> 19</a> -->
                     </div>
                   </div>
                 </div>
-                <div class="blog-item">
-                  <div class="content">
-                    <h6 class="post-title"><a href="#">Even the all-powerful Pointing has no control</a></h6>
-                    <div class="meta">
-                      <a href="#"><span class="mai-calendar"></span> July 12, 2018</a>
-                      <a href="#"><span class="mai-person"></span> Admin</a>
-                      <a href="#"><span class="mai-chatbubbles"></span> 19</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="blog-item">
-                  <div class="content">
-                    <h6 class="post-title"><a href="#">Even the all-powerful Pointing has no control</a></h6>
-                    <div class="meta">
-                      <a href="#"><span class="mai-calendar"></span> July 12, 2018</a>
-                      <a href="#"><span class="mai-person"></span> Admin</a>
-                      <a href="#"><span class="mai-chatbubbles"></span> 19</a>
-                    </div>
-                  </div>
-                </div>
+                <?php } ?>
               </div>
 
               <div class="widget-box">
@@ -177,7 +157,7 @@ $tbl_blogs = DB::table('tbl_blogs')->find('blogId',$blogId);
               <div class="widget-box">
                 <h3 class="widget-title">Paragraph</h3>
                 <div class="divider"></div>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
+                <?= $tbl_blogs['blogDemo'] ?>
               </div>
             </div>
           </div>

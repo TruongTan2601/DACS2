@@ -84,7 +84,7 @@
 </footer>
 <!-- Start copyright  -->
 <div class="footer-copyright">
-  <p class="footer-company">All Rights Reserved. &copy; 2018 <a href="#">TruongTanIT</a> Design By :
+  <p class="footer-company">All Rights Reserved. &copy; 2021 <a href="#">TruongTanIT</a> Design By :
     <a href="https://fb.com/stick.roser/">Truong Tan Dz</a>
   </p>
 </div>
