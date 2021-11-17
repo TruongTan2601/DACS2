@@ -4,30 +4,29 @@ Session::checkSession();
 
 if (isset($_POST['submit'])) {
   $pname = $_POST['pname'];
-  $pcate = $_POST['pcate'];
-  $pquan = $_POST['pquan'];
-  $pprice = $_POST['pprice'];
 
   $pimg = $_FILES['pimg']['name'];
-  $target_dir = "img/Coffee/";
+  $target_dir = "img/Blogs/";
   $target_file = $target_dir . basename($pimg);
   $pimg_tmp = $_FILES['pimg']['tmp_name'];
 
+  $tmp_dir = $_FILES["upload-file"]["tmp_name"];
+  $target_dir = "txt/";
+  $target_file = $target_dir . basename($_FILES["upload-file"]["name"]);
+
   $pdetail = $_POST['pdetail'];
 
-  $tbl_product = DB::table("tbl_product")->insert([
-    'productName' => "$pname",
-    'brandId' => "$pcate",
-    'productPrice' => "$pprice",
-    'productCurrentstatus' => "$pquan",
-    'productImage' => "$pimg",
-    'productDescription' => "$pdetail"
+  $tbl_blogs = DB::table("tbl_blogs")->insert([
+    'blogName' => "$pname",
+    'blogDescription' => "$target_file",
+    'blogImage' => "$pimg",
+    'blogDemo' => "$pdetail"
   ]);
   move_uploaded_file($pimg_tmp, $target_file);
+  move_uploaded_file($tmp_dir, $target_file);
 }
 
-$tbl_product = DB::table("tbl_product")->get();
-$tbl_brand = DB::table('tbl_brand')->get();
+$tbl_blogs = DB::table("tbl_blogs")->get();
 
 // if (isset($_POST['delete'])) {
 //   $productId = DB::table("tbl_product")->delete();
@@ -36,34 +35,30 @@ $tbl_brand = DB::table('tbl_brand')->get();
 $productS = null;
 if (isset($_POST['update'])) {
   $productId = $_POST['productId'];
-  $productS = DB::table('tbl_product')->find('productId', $productId);
+  $productS = DB::table('tbl_blogs')->find('blogId', $productId);
   // var_dump($productS);
 }
 
 if (isset($_POST['change'])) {
   $productId = $_POST['productId'];
   $productName = $_POST['productName'];
-
   $productImage = $_POST['productImage'];
-  
-  $productPrice = $_POST['productPrice'];
   $productCurrentstatus = $_POST['productCurrentstatus'];
   $productDescription = $_POST['productDescription'];
 
-  DB::table("tbl_product")->where('productId', $productId)->update([
-    'productName' => $productName,
-    'productImage' => $productImage,
-    'productPrice' => $productPrice,
-    'productCurrentstatus' => $productCurrentstatus,
-    'productDescription' => $productDescription
+  $tbl_blogs = DB::table("tbl_blogs")->where('blogId', $productId)->update([
+    'blogName' => $productName,
+    'blogImage' => $productImage,
+    'blogDemo' => $productCurrentstatus,
+    'blogDescription' => $productDescription
   ]);
-  header('Location: uploadproduct.php');
+  header('Location: blogs.php');
 }
 
 if (isset($_POST['delete'])) {
   $productId = $_POST['productId'];
-  DB::table('tbl_product')->where('productId', $productId)->delete();
-  header('Location: uploadproduct.php');
+  $delete = DB::table('tbl_blogs')->where('blogId', $productId)->delete();
+  header('Location: blogs.php');
 }
 
 ?>
@@ -73,8 +68,8 @@ if (isset($_POST['delete'])) {
 
 
 <head>
-  <?php require 'modules/head.php' ?>
-  <title>ADMIN | Products</title>
+<?php require 'modules/head.php' ?>
+  <title>ADMIN | Blogs</title>
 
   <style>
     .x-hide-display {
@@ -147,7 +142,7 @@ if (isset($_POST['delete'])) {
 <body>
   <?= include 'modules/sidebar.php' ?>
   <section class="home-section">
-    <div class="text"><span><i class="far fa-folder-open"></i> Products</span></div>
+    <div class="text"><span><i class="far fa-folder-open"></i> Blogs</span></div>
     <div class="block">
       <div class="card mb-3">
         <div class="card-body">
@@ -155,39 +150,36 @@ if (isset($_POST['delete'])) {
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>Name</th>
+                  <th>Title</th>
                   <th>Image</th>
-                  <th>Price</th>
+                  <th>Demo</th>
                   <th>Description</th>
-                  <th>Brand</th>
-                  <th>Current status</th>
+                  <th>Date Upload</th>
                   <th>Option</th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
-                  <th>Name</th>
+                  <th>Title</th>
                   <th>Image</th>
-                  <th>Price</th>
+                  <th>Demo</th>
                   <th>Description</th>
-                  <th>Brand</th>
-                  <th>Current status</th>
+                  <th>Date Upload</th>
                   <th>Option</th>
                 </tr>
               </tfoot>
               <tbody>
-                <?php foreach ($tbl_product as $row) { ?>
+                <?php foreach ($tbl_blogs as $row) { ?>
                   <tr>
-                    <td><?= $row["productName"] ?></td>
-                    <td><img width="100px" src="img/Coffee/<?= $row["productImage"] ?>" alt=""></td>
-                    <td><?= number_format($row["productPrice"], 0, '', ',') ?></td>
-                    <td><?= $row["productDescription"] ?></td>
-                    <td><?= $row["brandID"] ?></td>
-                    <td><b><?= $row["productCurrentstatus"] ?></b></td>
+                    <td><?= $row["blogName"] ?></td>
+                    <td><img width="100px" src="img/Blogs/<?= $row["blogImage"] ?>" alt=""></td>
+                    <td><?= $row["blogDemo"] ?></td>
+                    <td><?= $row["blogDescription"] ?></td>
+                    <td><b><?= $row["blogUpDate"] ?></b></td>
                     <td>
-                      <form id="<?= $row['productId'] ?>" method="POST">
-                        <input type="hidden" name="productId" value="<?= $row['productId'] ?>">
-                        <button style="background-color: #fff; border: none;" type="button" name="delete" onclick="confirmDelete(this, '<?= $row['productId'] ?>');"><i class="fas fa-trash-alt"></i></button>
+                      <form id="<?= $row['blogId'] ?>" method="POST">
+                        <input type="hidden" name="productId" value="<?= $row['blogId'] ?>">
+                        <button style="background-color: #fff; border: none;" type="button" name="delete" onclick="confirmDelete(this, '<?= $row['blogId'] ?>');"><i class="fas fa-trash-alt"></i></button>
                         <button style="background-color: #fff; border: none;" type="submit" name="update"><i class="fas fa-user-cog"></i> </button>
                       </form>
                     </td>
@@ -195,7 +187,7 @@ if (isset($_POST['delete'])) {
                 <?php } ?>
               </tbody>
             </table>
-            There are currently <?= DB::table('tbl_product')->count() ?> products
+            There are currently <?= DB::table('tbl_blogs')->count() ?> posts.
           </div>
         </div>
       </div>
@@ -209,31 +201,27 @@ if (isset($_POST['delete'])) {
           </div>
           <div class="update-form">
             <form method="POST">
-              <input type="hidden" name="productId" value="<?= $productS['productId'] ?>">
+              <input type="hidden" name="productId" value="<?= $productS['blogId'] ?>">
               <div class="form-item">
-                <p>Product name</p>
-                <input type="text" name="productName" value="<?= $productS['productName'] ?>">
+                <p>Blog name</p>
+                <input type="text" name="productName" value="<?= $productS['blogName'] ?>">
               </div>
               <div class="form-item">
-                <p>Product image</p>
-                <input type="file" name="productImage" value="<?= $productS['productImage'] ?>">
+                <p>Blog image</p>
+                <input type="file" name="productImage" value="<?= $productS['blogImage'] ?>" required>
               </div>
               <div class="form-item">
-                <p>Product price</p>
-                <input type="number" name="productPrice" min="1000" value="<?= $productS['productPrice'] ?>">
-              </div>
-              <div class="form-item">
-                <p>Current status</p>
-                <input type="text" name="productCurrentstatus" value="<?= $productS['productCurrentstatus'] ?>">
+                <p>Demo</p>
+                <input type="text" name="productCurrentstatus" value="<?= $productS['blogDemo'] ?>">
               </div>
               <br />
               <div class="form-item">
                 <p>Description</p>
-                <input type="text" name="productDescription" value="<?= $productS['productDescription'] ?>">
+                <input type="file" name="productDescription" value="<?= $productS['blogDescription'] ?>" required>
               </div>
               <br />
               <div class="form-item">
-                <button type="submit" name="change">Sửa</button>
+                <button type="submit" name="change">Change</button>
               </div>
             </form>
           </div>
@@ -247,36 +235,14 @@ if (isset($_POST['delete'])) {
       <form action="" class="needs-validation" novalidate method="POST" enctype="multipart/form-data">
         <div class="text-left">
           <div class="form-group">
-            <label for="pname">Product Name:</label>
+            <label for="pname">Blog title:</label>
             <input type="text" class="form-control" id="pname" placeholder="Enter name" name="pname" required>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
           </div>
           <div class="form-group">
-            <label for="pcate">Brand:</label>
-            <select class="form-control" name="pcate" id="pcate">
-              <<?php foreach ($tbl_brand as $row) { ?> 
-                <option value="<?= $row['brandId'] ?>"><?= $row['brandName'] ?></option>
-              <?php } ?>
-            </select>
-            <!-- <input type="text" class="form-control" id="pcate" placeholder="Enter category" name="pcate" required> -->
-            <div class="valid-feedback">Valid.</div>
-            <div class="invalid-feedback">Please fill out this field.</div>
-          </div>
-          <div class="form-group">
-            <label for="pprice">Price:</label>
-            <input type="number" class="form-control" id="pprice" name="pprice" min="1000" value="1000" required>
-            <!-- <input type="text" class="form-control" id="pcate" placeholder="Enter category" name="pcate" required> -->
-            <div class="valid-feedback">Valid.</div>
-            <div class="invalid-feedback">Please fill out this field.</div>
-          </div>
-          <div class="form-group">
-            <label for="pquan">Current status:</label>
-            <select class="form-control" name="pquan" id="pquan">
-              <option value=""></option>
-              <option value="NEW">NEW</option>
-              <option value="SALE">SALE</option>
-            </select>
+            <label for="upload-file">Demo: </label>
+            <input type="file" class="form-control-file border" id="upload-file" placeholder="Enter file" name="upload-file" required>
             <div class="valid-feedback">Valid.</div>
             <div class="invalid-feedback">Please fill out this field.</div>
           </div>

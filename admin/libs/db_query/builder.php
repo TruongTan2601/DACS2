@@ -11,6 +11,9 @@ class Builder
   private array $columns = ["*"];
   private array $conditions = [];
   private array $assignments = [];
+  private string $order;
+  private string $limit;
+  private string $offset;
 
   public function __construct($table, $as = null)
   {
@@ -31,6 +34,13 @@ class Builder
     return $this;
   }
 
+  public function orWhere($column, $operator = null, $value = null, $boolean = "or")
+  {
+    $condition = new Condition($column, $operator, $value);
+    Helper::pushCondition($this->conditions, $condition->build(), $boolean);
+    return $this;
+  }
+
   public function not($column, $value, $boolean = "and")
   {
     $condition = new Condition($column, "not", $value);
@@ -45,18 +55,21 @@ class Builder
     return $this;
   }
 
-
   public function offset($index)
   {
-    $condition = new Condition("offset $index");
-    Helper::pushCondition($this->conditions, $condition->build());
+    $this->offset = "OFFSET $index";
     return $this;
   }
 
   public function limit($size)
   {
-    $condition = new Condition("limit $size");
-    Helper::pushCondition($this->conditions, $condition->build());
+    $this->limit = "LIMIT $size";
+    return $this;
+  }
+
+  public function orderBy($column, $sort = "ASC")
+  {
+    $this->order = "ORDER BY $column $sort";
     return $this;
   }
 
@@ -68,7 +81,8 @@ class Builder
 
   public function first(...$columns)
   {
-    $this->columns = ($columns ?? ["*"]);
+    if (empty($columns)) $columns = ["*"];
+    $this->columns = $columns;
     return $this->execSelectSingle();
   }
 
@@ -84,6 +98,18 @@ class Builder
     $condition = new Condition($column, $value);
     Helper::pushCondition($this->conditions, $condition->build());
     return $this->execSelectSingle();
+  }
+
+  public function count()
+  {
+    $this->columns = ["COUNT(*) AS count"];
+    return $this->execSelectSingle()["count"];
+  }
+
+  public function sum($column)
+  {
+    $this->columns = ["SUM($column) AS sum"];
+    return $this->execSelectSingle()["sum"];
   }
 
   public function insert($assignments)
@@ -116,6 +142,15 @@ class Builder
     if (!empty($this->conditions)) {
       $conditions = $this->buildConditions();
       $sql = $sql . " WHERE " . $conditions;
+    }
+    if (isset($this->order)) {
+      $sql = $sql . " " . $this->order;
+    }
+    if (isset($this->limit)) {
+      $sql = $sql . " " . $this->limit;
+    }
+    if (isset($this->offset)) {
+      $sql = $sql . " " . $this->offset;
     }
     $this->sql = $sql;
   }

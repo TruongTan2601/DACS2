@@ -46,6 +46,14 @@ class Session
       header("Location:login.php");
     }
   }
+  public static function checkSessions()
+  {
+    self::init();
+    if (self::get("userUser") == false) {
+      self::destroy();
+      header("Location:login.php");
+    }
+  }
 
   public static function checkLogin()
   {

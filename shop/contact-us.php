@@ -3,8 +3,24 @@
 <!-- Basic -->
 
 <head>
-<?php require 'modules/head.php' ?>
-
+  <?php require 'modules/head.php' ?>
+  <?php
+  $today = date('d') . '-' . date('m') . '-' . date('Y') . ' ' . date("h:i:sa");
+  if (isset($_POST['submit'])) {
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $title = $_POST['title'];
+    $content = $_POST['content'];
+    DB::table('contact')->insert([
+      'contactName' => $name,
+      'contactEmail' => $email,
+      'contactTitle' => $title,
+      'contactMessage' => $content,
+      'contactDate' => $today
+    ]);
+    echo '<script>alert("Submitted successfully!")</script>';
+  }
+  ?>
 </head>
 
 <body>
@@ -34,7 +50,7 @@
           <div class="contact-form-right">
             <h2>GET IN TOUCH</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed odio justo, ultrices ac nisl sed, lobortis porta elit. Fusce in metus ac ex venenatis ultricies at cursus mauris.</p>
-            <form id="contactForm">
+            <form method="POST">
               <div class="row">
                 <div class="col-md-12">
                   <div class="form-group">
@@ -44,25 +60,25 @@
                 </div>
                 <div class="col-md-12">
                   <div class="form-group">
-                    <input type="text" placeholder="Your Email" id="email" class="form-control" name="name" required data-error="Please enter your email">
+                    <input type="text" placeholder="Your Email" id="email" class="form-control" name="email" required data-error="Please enter your email">
                     <div class="help-block with-errors"></div>
                   </div>
                 </div>
                 <div class="col-md-12">
                   <div class="form-group">
-                    <input type="text" class="form-control" id="subject" name="name" placeholder="Subject" required data-error="Please enter your Subject">
+                    <input type="text" class="form-control" id="subject" name="title" placeholder="Title" required data-error="Please enter your Subject">
                     <div class="help-block with-errors"></div>
                   </div>
                 </div>
                 <div class="col-md-12">
                   <div class="form-group">
-                    <textarea class="form-control" id="message" placeholder="Your Message" rows="4" data-error="Write your message" required></textarea>
+                    <textarea class="form-control" id="message" name="content" placeholder="Your Message" rows="4" data-error="Write your message" required></textarea>
                     <div class="help-block with-errors"></div>
                   </div>
                   <div class="submit-button text-center">
-                    <button class="btn hvr-hover" id="submit" type="submit">Send Message</button>
-                    <div id="msgSubmit" class="h3 text-center hidden"></div>
-                    <div class="clearfix"></div>
+                    <button class="btn hvr-hover" id="submit" name="submit" type="submit">Send Message</button>
+                    <!-- <div id="msgSubmit" class="h3 text-center hidden"></div>
+                    <div class="clearfix"></div> -->
                   </div>
                 </div>
               </div>
@@ -75,13 +91,13 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent urna diam, maximus ut ullamcorper quis, placerat id eros. Duis semper justo sed condimentum rutrum. Nunc tristique purus turpis. Maecenas vulputate. </p>
             <ul>
               <li>
-                <p><i class="fas fa-map-marker-alt"></i>Address: Michael I. Days 9000 <br>Preston Street Wichita,<br> KS 87213 </p>
+                <p><i class="fas fa-map-marker-alt"></i>Address: 110-112 Thu Khoa Huan Street <br>An Hai Dong, Son Tra,<br> Da Nang City.</p>
               </li>
               <li>
-                <p><i class="fas fa-phone-square"></i>Phone: <a href="tel:+1-888705770">+1-888 705 770</a></p>
+                <p><i class="fas fa-phone-square"></i>Phone: <a href="tel:0329 734 008">0329 734 008</a></p>
               </li>
               <li>
-                <p><i class="fas fa-envelope"></i>Email: <a href="mailto:contactinfo@gmail.com">contactinfo@gmail.com</a></p>
+                <p><i class="fas fa-envelope"></i>Email: <a href="mailto:vtttan.20it11@vku.udn.vn">vtttan.20it11@vku.udn.vn</p>
               </li>
             </ul>
           </div>

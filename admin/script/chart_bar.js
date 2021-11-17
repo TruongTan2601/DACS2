@@ -16,8 +16,9 @@ const data_bar = {
     labels: labels_bar,
     datasets: [{
             label: 'Điện thoại',
-            data: [65, 59, 80, 81, 56, 55, 40, 20, 31, 43, 23, 33],
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            data: [20, 59, 80, 81, 56, 55, 40, 20, 31, 43, 23, 33],
+            backgroundColor: 
+            'rgba(255, 99, 132, 0.2)',
             // 'rgba(255, 159, 64, 0.2)',
             // 'rgba(255, 205, 86, 0.2)',
             // 'rgba(75, 192, 192, 0.2)',

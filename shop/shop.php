@@ -1,23 +1,84 @@
-<?php
-require '../admin/connect.php';
-
-$tbl_product = DB::table('tbl_product')->get();
-$tbl_img_ig = DB::table('tbl_img_ig')->get();
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <!-- Basic -->
 
 <head>
-<?php require 'modules/head.php' ?>
+  <?php require 'modules/head.php' ?>
 
 </head>
 
+<?php
+$tbl_product = DB::table('tbl_product')->orderBy('productPrice')->get();
+$i = DB::table('tbl_product')->count();
+$tbl_img_ig = DB::table('tbl_img_ig')->get();
+
+$user = Session::get("userUser");
+
+if (isset($_POST['add_cart'])) {
+  if (isset($user) && $user) {
+    $productId = $_POST['productId'];
+    $productImage = $_POST['productImage'];
+    $productName = $_POST['productName'];
+    $productPrice = $_POST['productPrice'];
+    $productQuantity = $_POST['productQuantity'];
+
+
+    $item = DB::table('cart')->where('productId', $productId)->where('userId', $user['userId'])->first();
+
+    if (isset($item['cartQuantity']) && $item['cartQuantity']) {
+      $Quantity = $item['cartQuantity'] + $productQuantity;
+      DB::table('cart')->where('productId', $productId)->where('userId', $user['userId'])->update(['cartQuantity' => $Quantity]);
+    } else {
+      DB::table('cart')->insert([
+        'productId' => $productId,
+        'cartName' => $productName,
+        'cartImage' => $productImage,
+        'cartPrice' => $productPrice,
+        'cartQuantity' => $productQuantity,
+        'userId' => $user['userId']
+      ]);
+    }
+    echo '<script> window.location = "shop.php" </script>';
+  } else {
+    header('Location: login.php');
+  }
+}
+if (isset($_POST['add_wishlist'])) {
+  if (isset($user) && $user) {
+    $productId = $_POST['productId'];
+    $productImage = $_POST['productImage'];
+    $productName = $_POST['productName'];
+    $productPrice = $_POST['productPrice'];
+    $productQuantity = $_POST['productQuantity'];
+
+
+    $item = DB::table('wishlist')->where('productId', $productId)->where('userId', $user['userId'])->first();
+
+    if (isset($item['productId']) && $item['productId']) {
+      echo '<script> alert("The product is already on the wishlist!");window.location = "wishlist.php"; </script>';
+    } else {
+      DB::table('wishlist')->insert([
+        'productId' => $productId,
+        'wishlistName' => $productName,
+        'wishlistImage' => $productImage,
+        'wishlistPrice' => $productPrice,
+        'userId' => $user['userId']
+      ]);
+    }
+    echo '<script> window.location = "wishlist.php" </script>';
+  } else {
+    header('Location: login.php');
+  }
+}
+// $list;
+if ((isset($_GET['list'])) && ($_GET['list'])) {
+  $tbl_product = DB::table('tbl_product')->where('brandID',$_GET['list'])->orderBy('productPrice')->get();
+  $i = DB::table('tbl_product')->where('brandID',$_GET['list'])->count();
+}
+?>
+
 <body>
   <?php include 'modules/header.php' ?>
-
   <!-- Start All Title Box -->
   <div class="all-title-box">
     <div class="container">
@@ -47,12 +108,12 @@ $tbl_img_ig = DB::table('tbl_img_ig')->get();
                   <select id="basic" class="selectpicker show-tick form-control" data-placeholder="$ USD">
                     <option data-display="Select">Nothing</option>
                     <option value="1">Popularity</option>
-                    <option value="2">High Price → High Price</option>
+                    <option value="2">High Price → Low Price</option>
                     <option value="3">Low Price → High Price</option>
                     <option value="4">Best Selling</option>
                   </select>
                 </div>
-                <p>Showing all 4 results</p>
+                <p>Showing all <?= $i ?> results</p>
               </div>
               <div class="col-12 col-sm-4 text-center text-sm-right">
                 <ul class="nav nav-tabs ml-auto">
@@ -70,9 +131,9 @@ $tbl_img_ig = DB::table('tbl_img_ig')->get();
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade show active" id="grid-view">
                   <div class="row">
-                    <?php foreach ($tbl_product as $row) { ?>
+                    <?php foreach ($tbl_product as $row) { ?> 
                       <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
-                        <form action="cart.php" method="POST">
+                        <form action="shop.php" method="POST">
                           <input type="hidden" name="productId" value="<?= $row['productId'] ?>">
                           <input type="hidden" name="productName" value="<?= $row['productName'] ?>">
                           <input type="hidden" name="productPrice" value="<?= $row['productPrice'] ?>">
@@ -107,36 +168,46 @@ $tbl_img_ig = DB::table('tbl_img_ig')->get();
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="list-view">
                   <?php foreach ($tbl_product as $row) { ?>
-                    <div class="list-view-box">
-                      <div class="row">
-                        <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
-                          <div class="products-single fix">
-                            <div class="box-img-hover">
-                              <div class="type-lb">
-                                <p class="new"><?= $row["productCurrentstatus"] ?></p>
-                              </div>
-                              <img src="../admin/img/Coffee/<?= $row["productImage"] ?>" class="img-fluid" alt="Image">
-                              <div class="mask-icon">
-                                <ul>
-                                  <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
-                                  <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
-                                  <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
-                                </ul>
+                    <form action="shop.php" method="POST">
+                      <input type="hidden" name="productId" value="<?= $row['productId'] ?>">
+                      <input type="hidden" name="productName" value="<?= $row['productName'] ?>">
+                      <input type="hidden" name="productPrice" value="<?= $row['productPrice'] ?>">
+                      <input type="hidden" name="productImage" value="<?= $row['productImage'] ?>">
+                      <input type="hidden" name="productQuantity" value="1">
+                      <div class="list-view-box">
+                        <div class="row">
+                          <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
+                            <div class="products-single fix">
+                              <div class="box-img-hover">
+                                <div class="type-lb">
+                                  <p class="new"><?= $row["productCurrentstatus"] ?></p>
+                                </div>
+                                <img src="../admin/img/Coffee/<?= $row["productImage"] ?>" class="img-fluid" alt="Image">
+                                <div class="mask-icon">
+                                  <ul>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="View"><i class="fas fa-eye"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Compare"><i class="fas fa-sync-alt"></i></a></li>
+                                    <li><a href="#" data-toggle="tooltip" data-placement="right" title="Add to Wishlist"><i class="far fa-heart"></i></a></li>
+                                  </ul>
 
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                        <div class="col-sm-6 col-md-6 col-lg-8 col-xl-8">
-                          <div class="why-text full-width">
-                            <h4><?= $row["productName"] ?></h4>
-                            <h5> <del>$ 60.00</del> <?= number_format($row["productPrice"], 0, '', ',') ?> VNĐ</h5>
-                            <p><?= $row["productDescription"] ?></p>
-                            <a class="btn hvr-hover" href="#">Add to Cart</a>
+                          <div class="col-sm-6 col-md-6 col-lg-8 col-xl-8">
+                            <div class="why-text full-width">
+                              <h4><a style="color: #000;" href="shop-detail.php?id=<?= $row['productId'] ?>"><?= $row["productName"] ?></a></h4>
+                              <h5>
+                                <!-- <del>$ 60.00</del> -->
+                                <?= number_format($row["productPrice"], 0, '', ',') ?> VNĐ
+                              </h5>
+                              <p><?= $row["productDescription"] ?></p>
+                              <input class="btn hvr-hover" name="add_cart" type="submit" value="Add to Cart">
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </form>
                   <?php } ?>
                 </div>
               </div>
@@ -161,8 +232,8 @@ $tbl_img_ig = DB::table('tbl_img_ig')->get();
                   </a>
                   <div class="collapse show" id="sub-men1" data-parent="#list-group-men">
                     <div class="list-group">
-                      <a href="#" class="list-group-item list-group-item-action active">Coffee Vietnam <small class="text-muted">(5)</small></a>
-                      <a href="#" class="list-group-item list-group-item-action">Coffee Italia <small class="text-muted">(5)</small></a>
+                      <a href="shop.php?list=CoffeeViet" class="list-group-item list-group-item-action active">Coffee Vietnam <small class="text-muted">(5)</small></a>
+                      <a href="shop.php?list=ItaliaCoffee" class="list-group-item list-group-item-action">Coffee Italia <small class="text-muted">(5)</small></a>
                     </div>
                   </div>
                 </div>
@@ -172,14 +243,14 @@ $tbl_img_ig = DB::table('tbl_img_ig')->get();
                   </a>
                   <div class="collapse" id="sub-men2" data-parent="#list-group-men">
                     <div class="list-group">
-                      <a href="#" class="list-group-item list-group-item-action">Juice <small class="text-muted">(10)</small></a>
-                      <a href="#" class="list-group-item list-group-item-action">Juices <small class="text-muted">(20)</small></a>
+                      <a href="shop.php?list=SugarcaneJuice" class="list-group-item list-group-item-action">Juice <small class="text-muted">(10)</small></a>
+                      <a href="shop.php?list=Juice" class="list-group-item list-group-item-action">Juices <small class="text-muted">(20)</small></a>
                     </div>
                   </div>
                 </div>
-                <a href="#" class="list-group-item list-group-item-action"> Vitamin <small class="text-muted">(5) </small></a>
-                <a href="#" class="list-group-item list-group-item-action"> Tea <small class="text-muted">(6)</small></a>
-                <a href="#" class="list-group-item list-group-item-action"> Yogurts <small class="text-muted">(5)</small></a>
+                <a href="shop.php?list=Vitamin" class="list-group-item list-group-item-action"> Vitamin <small class="text-muted">(5) </small></a>
+                <a href="shop.php?list=Tea" class="list-group-item list-group-item-action"> Tea <small class="text-muted">(6)</small></a>
+                <a href="shop.php?list=Yogurt" class="list-group-item list-group-item-action"> Yogurts <small class="text-muted">(5)</small></a>
               </div>
             </div>
             <!-- <div class="filter-price-left">

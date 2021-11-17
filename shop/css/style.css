@@ -1173,6 +1173,7 @@ ul.cart-list > li.total > .btn:hover {
 }
 .title-blog {
   padding: 40px 30px 40px 30px;
+  min-height: 250px;
 }
 .title-blog h3 {
   font-size: 20px;
@@ -2079,6 +2080,7 @@ ul.cart-list > li.total > .btn:hover {
 .why-text.full-width p {
   padding-bottom: 20px;
 }
+.why-text.full-width input,
 .why-text.full-width a {
   padding: 10px 20px;
   font-weight: 700;
@@ -2214,7 +2216,7 @@ ul.cart-list > li.total > .btn:hover {
 .my-account-box-main {
   padding: 70px 0px;
 }
-.shopping-box a {
+.shopping-box input {
   font-size: 18px;
   color: #ffffff;
   border: none;
@@ -2325,13 +2327,17 @@ ul.cart-list > li.total > .btn:hover {
   font-size: 18px;
   font-weight: 700;
 }
-.service-icon a {
+.service-icon a,
+.service-icon span,
+.service-icon button {
   background: rgba(0, 0, 0, 0.9);
   -webkit-transition: -webkit-transform ease-out 0.1s, background 0.2s;
   -moz-transition: -moz-transform ease-out 0.1s, background 0.2s;
   transition: transform ease-out 0.1s, background 0.2s;
 }
-.service-icon a {
+.service-icon a,
+.service-icon span,
+.service-icon button {
   display: inline-block;
   font-size: 0px;
   cursor: pointer;
@@ -2345,7 +2351,9 @@ ul.cart-list > li.total > .btn:hover {
   z-index: 1;
   color: #ffffff;
 }
-.service-icon a::after {
+.service-icon a::after,
+.service-icon span::after,
+.service-icon button::after {
   pointer-events: none;
   position: absolute;
   width: 100%;
@@ -2367,12 +2375,16 @@ ul.cart-list > li.total > .btn:hover {
   -ms-transform: scale(0.9);
   transform: scale(0.9);
 }
-.service-icon a:hover::after {
+.service-icon a:hover::after,
+.service-icon span:hover::after,
+.service-icon button:hover::after {
   -webkit-animation: sonarEffect 1.3s ease-out 75ms;
   -moz-animation: sonarEffect 1.3s ease-out 75ms;
   animation: sonarEffect 1.3s ease-out 75ms;
 }
-.service-icon a:hover {
+.service-icon a:hover,
+.service-icon span:hover,
+.service-icon button:hover {
   background: rgba(251, 183, 20, 1);
   -webkit-transform: scale(0.93);
   -moz-transform: scale(0.93);
@@ -2618,7 +2630,8 @@ ul.cart-list > li.total > .btn:hover {
 .add-to-btn .share-bar {
   float: right;
 }
-.add-comp a {
+.add-comp a,
+.add-comp input {
   padding: 10px 20px;
   font-weight: 700;
   color: #ffffff;

@@ -1,13 +1,13 @@
 <?php
 require 'connect.php';
 Session::checkSession();
-$i = 1;
-$q=1;
+$tbl_reservation =  DB::table('tbl_reservations')->where('check_seen',0)->get();
+$tbl_reservations = DB::table('tbl_reservations')->where('check_seen',1)->get();
 
 $productS = null;
 if (isset($_POST['accept'])) {
   $productId = $_POST['bill_Id'];
-  $productS = DB::table('contact')->find('contactId', $productId);
+  $productS = DB::table('tbl_reservations')->find('Id', $productId);
 }
 
 require './includes/Exception.php';
@@ -45,13 +45,14 @@ if (isset($_POST['submit'])) {
     echo '<script>
     alert("Email send ...");
   </script>';
-    DB::table('contact')->where('contactId', $id)->update(['check_seen' => 1]);
+  DB::table('tbl_reservations')->where('Id',$id)->update(['check_seen' => 1]);
   } else {
     echo "Error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
   }
 
   $mail->smtpClose();
 }
+
 ?>
 <!DOCTYPE html>
 <!-- Created by CodingLab |www.youtube.com/CodingLabYT-->
@@ -59,7 +60,7 @@ if (isset($_POST['submit'])) {
 
 <head>
   <?php require 'modules/head.php' ?>
-  <title>ADMIN | Chat</title>
+  <title>ADMIN | Booking</title>
   <style>
     .x-hide-display {
       display: none;
@@ -133,7 +134,7 @@ if (isset($_POST['submit'])) {
 <body>
   <?= include 'modules/sidebar.php' ?>
   <section class="home-section">
-    <div class="text"><span><i class="far fa-comments"></i> New Chat</span></div>
+    <div class="text"><span><i class="fas fa-couch"></i> New Booking</span></div>
     <div class="block">
       <div class="card mb-3">
         <div class="card-body">
@@ -141,27 +142,27 @@ if (isset($_POST['submit'])) {
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>STT</th>
                   <th>Name</th>
+                  <th>Phone</th>
                   <th>Email</th>
                   <th>Date</th>
-                  <th>Title</th>
-                  <th>Content</th>
+                  <th>Hour</th>
+                  <th>People</th>
                   <th>Option</th>
                 </tr>
               </thead>
               <tbody>
-                <?php foreach (DB::table('contact')->where('check_seen', 0)->get() as $row) { ?>
+                <?php foreach ($tbl_reservation as $row) { ?>
                   <tr>
-                    <td><?= $i++ ?></td>
-                    <td><?= $row['contactName'] ?></td>
-                    <td><?= $row['contactEmail'] ?></td>
-                    <td><?= $row['contactDate'] ?></td>
-                    <td><?= $row['contactTitle'] ?></td>
-                    <td><?= $row['contactMessage'] ?></td>
+                    <td><?= $row['reservationName'] ?></td>
+                    <td><?= $row['reservationPhone'] ?></td>
+                    <td><?= $row['reservationEmail'] ?></td>
+                    <td><?= $row['reservationDate'] ?></td>
+                    <td><?= $row['reservationHour'] ?></td>
+                    <td><?= $row['reservationPeople'] ?></td>
                     <td>
                       <form method="post">
-                        <input type="hidden" name="bill_Id" value="<?= $row['contactId'] ?>">
+                        <input type="hidden" name="bill_Id" value="<?= $row['Id'] ?>">
                         <button style="background-color: #fff; border: none; padding-right: 10px;" type="submit" name="delete"><i class="fas fa-times"></i></button>
                         <button style="background-color: #fff; border: none;" type="submit" name="accept"><i class="fas fa-check"></i></button>
                       </form>
@@ -170,7 +171,7 @@ if (isset($_POST['submit'])) {
                 <?php } ?>
               </tbody>
             </table>
-            There are currently <b><?= DB::table('contact')->where('check_seen', 0)->count() ?></b> messages.
+            There are currently <b><?= DB::table('tbl_reservations')->where('check_seen',0)->count() ?></b> bookings.
           </div>
         </div>
       </div>
@@ -185,17 +186,17 @@ if (isset($_POST['submit'])) {
               Please send your message below. We will get back to you at the earliest!
             </p>
             <form role="form" method="post" id="reused_form">
-              <input type="hidden" name="id" value="<?= $productS['contactId'] ?>">
+              <input type="hidden" name="id" value="<?= $productS['Id'] ?>">
               <div class="row">
                 <div class="col-sm-6 form-group">
                   <label for="name">
                     Content:</label>
-                  <input type="text" class="form-control" id="name" name="content" value="<?= $productS['contactName'] ?>" required>
+                  <input type="text" class="form-control" id="name" name="content" value="<?= $productS['reservationName'] ?>" required>
                 </div>
                 <div class="col-sm-6 form-group">
                   <label for="email">
                     Sent to email:</label>
-                  <input type="email" class="form-control" id="email" name="email" value="<?= $productS['contactEmail'] ?>">
+                  <input type="email" class="form-control" id="email" name="email" value="<?= $productS['reservationEmail'] ?>">
                 </div>
               </div>
 
@@ -231,7 +232,7 @@ if (isset($_POST['submit'])) {
         </div>
       </div>
     <?php  } ?>
-    <div class="text"><span><i class="far fa-comments"></i> Chat</span></div>
+    <div class="text"><span><i class="fas fa-couch"></i> Manager Booking</span></div>
     <div class="block">
       <div class="card mb-3">
         <div class="card-body">
@@ -239,28 +240,35 @@ if (isset($_POST['submit'])) {
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <thead>
                 <tr>
-                  <th>STT</th>
                   <th>Name</th>
+                  <th>Phone</th>
                   <th>Email</th>
                   <th>Date</th>
-                  <th>Title</th>
-                  <th>Content</th>
+                  <th>Hour</th>
+                  <th>People</th>
+                  <th>Option</th>
                 </tr>
               </thead>
               <tbody>
-                <?php foreach (DB::table('contact')->where('check_seen', 1)->get() as $row) { ?>
+                <?php foreach ($tbl_reservations as $row) { ?>
                   <tr>
-                    <td><?= $q++ ?></td>
-                    <td><?= $row['contactName'] ?></td>
-                    <td><?= $row['contactEmail'] ?></td>
-                    <td><?= $row['contactDate'] ?></td>
-                    <td><?= $row['contactTitle'] ?></td>
-                    <td><?= $row['contactMessage'] ?></td>
+                    <td><?= $row['reservationName'] ?></td>
+                    <td><?= $row['reservationPhone'] ?></td>
+                    <td><?= $row['reservationEmail'] ?></td>
+                    <td><?= $row['reservationDate'] ?></td>
+                    <td><?= $row['reservationHour'] ?></td>
+                    <td><?= $row['reservationPeople'] ?></td>
+                    <td>
+                      <form method="post">
+                        <input type="hidden" name="bill_Id" value="<?= $row['Id'] ?>">
+                        <button style="background-color: #fff; border: none; padding-right: 10px;" type="submit" name="delete"><i class="fas fa-times"></i></button>
+                      </form>
+                    </td>
                   </tr>
                 <?php } ?>
               </tbody>
             </table>
-            There are currently <b><?= DB::table('contact')->where('check_seen', 1)->count() ?></b> messages.
+            There are currently <b><?= DB::table('tbl_reservations')->where('check_seen',1)->count() ?></b> booking.
           </div>
         </div>
       </div>

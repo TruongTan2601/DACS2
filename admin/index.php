@@ -1,6 +1,7 @@
 <?php
-	require 'connect.php';
-	Session::checkSession();
+require 'connect.php';
+Session::checkSession();
+
 ?>
 
 <!DOCTYPE html>
@@ -8,15 +9,9 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta charset="UTF-8" />
+  <?php require 'modules/head.php' ?>
   <title>ADMIN</title>
-  <link rel="icon" href="img/logotre.jpg" type="image/x-icon"/>
-  <link rel="stylesheet" href="./css/admin.css" />
-  <!-- Boxicons CDN Link -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
-  <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
 </head>
 
 <body>
@@ -32,23 +27,23 @@
               <div class="card-body-icon">
                 <i class="fas fa-fw fa-comments"></i>
               </div>
-              <div class="text-left">26 New Messages!</div>
+              <div class="text-left"><?= DB::table('contact')->where('check_seen', 0)->count() ?> New Messages!</div>
             </div>
-            <a class="card-footer text-white clearfix small z-1" href="#">
+            <a class="card-footer text-white clearfix small z-1" href="chat.php">
               <span class="float-left">View Details</span>
               <span class="float-right"><i class="fas fa-angle-right"></i></span>
             </a>
           </div>
         </div>
         <div class="col-xl-3 col-sm-6 mb-3 mt-4">
-          <div class="card text-white bg-warning o-hidden h-100">
+          <div class="card text-white bg-secondary o-hidden h-100">
             <div class="card-body">
               <div class="card-body-icon">
-                <i class="fas fa-fw fa-list"></i>
+                <i class="fas fa-couch"></i>
               </div>
-              <div class="text-left">11 New Tasks!</div>
+              <div class="text-left"><?= DB::table('tbl_reservations')->where('check_seen', 0)->count() ?> New Booking!</div>
             </div>
-            <a class="card-footer text-white clearfix small z-1" href="#">
+            <a class="card-footer text-white clearfix small z-1" href="booking.php">
               <span class="float-left">View Details</span>
               <span class="float-right"><i class="fas fa-angle-right"></i></span>
             </a>
@@ -60,9 +55,9 @@
               <div class="card-body-icon">
                 <i class="fas fa-fw fa-shopping-cart"></i>
               </div>
-              <div class="text-left">123 New Orders!</div>
+              <div class="text-left"><?= DB::table('bill')->where('check_seen', 0)->count() ?> New Orders!</div>
             </div>
-            <a class="card-footer text-white clearfix small z-1" href="#">
+            <a class="card-footer text-white clearfix small z-1" href="order.php">
               <span class="float-left">View Details</span>
               <span class="float-right"><i class="fas fa-angle-right"></i></span>
             </a>
@@ -72,11 +67,11 @@
           <div class="card text-white bg-danger o-hidden h-100">
             <div class="card-body">
               <div class="card-body-icon">
-                <i class="fas fa-fw fa-life-ring"></i>
+                <i class="fas fa-newspaper"></i>
               </div>
-              <div class="text-left">13 New Tickets!</div>
+              <div class="text-left"><?= DB::table('tbl_blogs')->count() ?> New Blogs!</div>
             </div>
-            <a class="card-footer text-white clearfix small z-1" href="#">
+            <a class="card-footer text-white clearfix small z-1" href="blogs.php">
               <span class="float-left">View Details</span>
               <span class="float-right"><i class="fas fa-angle-right"></i></span>
             </a>
@@ -87,7 +82,7 @@
   </section>
   <section class="home-section">
     <div class="text">
-      <span><i class="fas fa-chart-line"></i> Chart</span>
+      <span><i class="fas fa-chart-line"></i> Monthly revenue chart</span>
     </div>
     <div class="block">
       <div class="chart">
@@ -118,89 +113,7 @@
                   <th>Salary</th>
                 </tr>
               </thead>
-              <tfoot>
-                <tr>
-                  <th>Name</th>
-                  <th>Position</th>
-                  <th>Office</th>
-                  <th>Age</th>
-                  <th>Start date</th>
-                  <th>Salary</th>
-                </tr>
-              </tfoot>
               <tbody>
-                <tr>
-                  <td>Tiger Nixon</td>
-                  <td>System Architect</td>
-                  <td>Edinburgh</td>
-                  <td>61</td>
-                  <td>2011/04/25</td>
-                  <td>$320,800</td>
-                </tr>
-                <tr>
-                  <td>Garrett Winters</td>
-                  <td>Accountant</td>
-                  <td>Tokyo</td>
-                  <td>63</td>
-                  <td>2011/07/25</td>
-                  <td>$170,750</td>
-                </tr>
-                <tr>
-                  <td>Ashton Cox</td>
-                  <td>Junior Technical Author</td>
-                  <td>San Francisco</td>
-                  <td>66</td>
-                  <td>2009/01/12</td>
-                  <td>$86,000</td>
-                </tr>
-                <tr>
-                  <td>Cedric Kelly</td>
-                  <td>Senior Javascript Developer</td>
-                  <td>Edinburgh</td>
-                  <td>22</td>
-                  <td>2012/03/29</td>
-                  <td>$433,060</td>
-                </tr>
-                <tr>
-                  <td>Airi Satou</td>
-                  <td>Accountant</td>
-                  <td>Tokyo</td>
-                  <td>33</td>
-                  <td>2008/11/28</td>
-                  <td>$162,700</td>
-                </tr>
-                <tr>
-                  <td>Brielle Williamson</td>
-                  <td>Integration Specialist</td>
-                  <td>New York</td>
-                  <td>61</td>
-                  <td>2012/12/02</td>
-                  <td>$372,000</td>
-                </tr>
-                <tr>
-                  <td>Herrod Chandler</td>
-                  <td>Sales Assistant</td>
-                  <td>San Francisco</td>
-                  <td>59</td>
-                  <td>2012/08/06</td>
-                  <td>$137,500</td>
-                </tr>
-                <tr>
-                  <td>Rhona Davidson</td>
-                  <td>Integration Specialist</td>
-                  <td>Tokyo</td>
-                  <td>55</td>
-                  <td>2010/10/14</td>
-                  <td>$327,900</td>
-                </tr>
-                <tr>
-                  <td>Colleen Hurst</td>
-                  <td>Javascript Developer</td>
-                  <td>San Francisco</td>
-                  <td>39</td>
-                  <td>2009/09/15</td>
-                  <td>$205,500</td>
-                </tr>
                 <tr>
                   <td>Sonya Frost</td>
                   <td>Software Engineer</td>
@@ -229,7 +142,56 @@
   </section>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
   <script src="script/script.js"></script>
-  <script src="script/chart_line.js"></script>
+  <!-- <script src="script/chart_line.js"></script> -->
+  <script>
+    const labels_line = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    const data_line = {
+      labels: labels_line,
+      datasets: [{
+        label: 'Balance (VND)',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: [
+          <?= DB::table('bill')->where('month', 1)->sum('subtotal') ?>,
+          <?= DB::table('bill')->where('month', 2)->sum('subtotal') ?>,
+          <?= DB::table('bill')->where('month', 3)->sum('subtotal') ?>,
+          <?= DB::table('bill')->where('month', 4)->sum('subtotal') ?>,
+          <?= DB::table('bill')->where('month', 5)->sum('subtotal') ?>,
+          <?= DB::table('bill')->where('month', 6)->sum('subtotal') ?>,
+          <?= DB::table('bill')->where('month', 7)->sum('subtotal') ?>,
+          <?= DB::table('bill')->where('month', 8)->sum('subtotal') ?>,
+          <?= DB::table('bill')->where('month', 9)->sum('subtotal') ?>,
+          <?= DB::table('bill')->where('month', 10)->sum('subtotal') ?>,
+          <?= DB::table('bill')->where('month', 11)->sum('subtotal') ?>,
+          <?= DB::table('bill')->where('month', 12)->sum('subtotal') ?>
+        ],
+        fill: false,
+        tension: 0
+      }]
+    };
+    const config_line = {
+      type: 'line',
+      data: data_line,
+      options: {}
+    };
+    var chartline = new Chart(
+      document.getElementById('chart--line'),
+      config_line
+    );
+  </script>
   <!-- <script src="script/admin-min.js"></script> -->
 </body>
 

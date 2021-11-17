@@ -1,6 +1,5 @@
 //
 
-
 //line
 const labels_line = [
     'January',

@@ -17,9 +17,8 @@ $tbl_blog = DB::table('tbl_blogs')->get();
   <!-- Mobile Metas -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Revetive - Free Business Corporate Template By MACode ID</title>
-
-  <link rel="stylesheet" href="../assets/css/theme.css">
+  <title>Blog</title>
+  <link rel="stylesheet" href="css/theme.css">
   <?php require 'modules/head.php' ?>
 
 </head>

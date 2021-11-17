@@ -6,6 +6,41 @@
   <?php require 'modules/head.php' ?>
 
 </head>
+<?php
+if (isset($_POST['add_cart'])) {
+  $productId = $_POST['productId'];
+  $productImage = $_POST['productImage'];
+  $productName = $_POST['productName'];
+  $productPrice = $_POST['productPrice'];
+  $productQuantity = $_POST['productQuantity'];
+
+  $user = Session::get("userUser");
+  $item = DB::table('cart')->where('productId', $productId)->where('userId', $user['userId'])->first();
+
+  if (!isset($item['cartQuantity'])) {
+    DB::table('cart')->insert([
+      'productId' => $productId,
+      'cartName' => $productName,
+      'cartImage' => $productImage,
+      'cartPrice' => $productPrice,
+      'cartQuantity' => $productQuantity,
+      'userId' => $user['userId']
+    ]);
+  } else {
+    $Quantity = $item['cartQuantity'] + $productQuantity;
+    DB::table('cart')->where('productId', $productId)->where('userId', $user['userId'])->update(['cartQuantity' => $Quantity]);
+  }
+}
+
+if (isset($_POST['del_id'])) {
+  $id = $_POST['cartId'];
+  DB::table('cart')->where('cartId',$id)->delete();
+}
+
+if (isset($_POST['delete_cart'])) {
+  DB::table('cart')->where('userId',$user['userId'])->delete();
+}
+?>
 
 <body>
   <?php include 'modules/header.php' ?>
@@ -17,7 +52,7 @@
         <div class="col-lg-12">
           <h2>Cart</h2>
           <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Shop</a></li>
+            <li class="breadcrumb-item"><a href="shop.php">Shop</a></li>
             <li class="breadcrumb-item active">Cart</li>
           </ul>
         </div>
@@ -30,129 +65,129 @@
   <div class="cart-box-main">
     <div class="container">
       <?php
-      if (isset($_SESSION['cart']) && is_array($_SESSION['cart'])) {
-        $subtotal = 0;
+      $subtotal = 0;
+      $i=1;
       ?>
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="table-main table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>STT</th>
-                    <th>Images</th>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                    <th>Remove</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php if (isset($_SESSION['cart']) && $_SESSION['cart']) { ?>
-                    <?php
-                    for ($i = 0; $i < sizeof($_SESSION['cart']); $i++) {
-                      $total = $_SESSION['cart'][$i][2] * $_SESSION['cart'][$i][3];
-                      $subtotal += $total;
-                    ?>
-                      <tr>
-                        <td><?= $i + 1 ?></td>
-                        <td class="thumbnail-img">
-                          <a href="#">
-                            <img class="img-fluid" src="../admin/img/Coffee/<?= $_SESSION['cart'][$i][0] ?>" alt="" />
-                          </a>
-                        </td>
-                        <td class="name-pr">
-                          <a href="shop-detail.php?id=<?= $_SESSION['cart'][$i][4] ?>">
-                            <?= $_SESSION['cart'][$i][1] ?>
-                          </a>
-                        </td>
-                        <td class="price-pr">
-                          <p><?= $_SESSION['cart'][$i][2] ?> VNĐ</p>
-                        </td>
-                        <td class="quantity-box"><input type="number" size="4" value="<?= $_SESSION['cart'][$i][3] ?>" min="0" step="1" class="c-input-text qty text"></td>
-                        <td class="total-pr">
-                          <p><?= $total ?> VNĐ</p>
-                        </td>
-                        <td class="remove-pr">
-                          <a href="cart.php?del_id=<?= $i ?>">
-                            <i class="fas fa-times"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    <?php } ?>
-                  <?php } else { ?>
-                    <tr>
-                      <td style="text-align: center;" colspan="7">
-                        <h2>Your cart is empty!!!</h2>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="table-main table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Images</th>
+                  <th>Product Name</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                  <th>Remove</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php if (isset($cart) && $cart) { ?>
+                  <?php
+                  foreach ($cart as $row) {
+                    $total = $row['cartPrice'] * $row['cartQuantity'];
+                    $subtotal += $total;
+                  ?>
+                    <tr>  
+                      <td><?= $i++ ?></td>
+                      <td class="thumbnail-img">
+                        <a href="#">
+                          <img class="img-fluid" src="../admin/img/Coffee/<?= $row['cartImage'] ?>" alt="" />
+                        </a>
+                      </td>
+                      <td class="name-pr">
+                        <a href="shop-detail.php?id=<?= $row['productId'] ?>">
+                          <?= $row['cartName'] ?>
+                        </a>
+                      </td>
+                      <td class="price-pr">
+                        <p><?= $row['cartPrice'] ?> VNĐ</p>
+                      </td>
+                      <td class="quantity-box"><input type="number" size="4" value="<?= $row['cartQuantity'] ?>" min="0" step="1" class="c-input-text qty text"></td>
+                      <td class="total-pr">
+                        <p><?= $total ?> VNĐ</p>
+                      </td>
+                      <td class="remove-pr">
+                        <form method="post">
+                          <input type="hidden" name="cartId" value="<?= $row['cartId'] ?>">
+                          <input type="submit" style="border: none; background: none; cursor: pointer;" name="del_id" value="X">
+                        </form>
                       </td>
                     </tr>
                   <?php } ?>
-                </tbody>
-              </table>
-            </div>
+                <?php } else { ?>
+                  <tr>
+                    <td style="text-align: center;" colspan="7">
+                      <h2>Your cart is empty!!!</h2>
+                    </td>
+                  </tr>
+                <?php } ?>
+              </tbody>
+            </table>
           </div>
         </div>
+      </div>
 
-        <div class="row my-5">
-          <div class="col-lg-6 col-sm-6">
-            <div class="coupon-box">
-              <div class="input-group input-group-sm">
-                <input class="form-control" placeholder="Enter your coupon code" aria-label="Coupon code" type="text">
-                <div class="input-group-append">
-                  <button class="btn btn-theme" type="button">Apply Coupon</button>
-                </div>
+      <div class="row my-5">
+        <div class="col-lg-6 col-sm-6">
+          <div class="coupon-box">
+            <div class="input-group input-group-sm">
+              <input class="form-control" placeholder="Enter your coupon code" aria-label="Coupon code" type="text">
+              <div class="input-group-append">
+                <button class="btn btn-theme" type="button">Apply Coupon</button>
               </div>
             </div>
           </div>
-          <div class="col-lg-6 col-sm-6">
-            <div class="update-box">
-              <form action="">
-                <input type="hidden" name="id">
-                <a href="cart.php?del_cart=1">Delete cart</a>
-                <input value="Update Cart" type="submit">
-              </form>
-            </div>
+        </div>
+        <div class="col-lg-6 col-sm-6">
+          <div class="update-box">
+            <form method="POST">
+              <input type="hidden" name="id">
+              <input value="Delete Cart" type="submit" name="delete_cart">
+              <input value="Update Cart" type="submit" name="update_cart">
+            </form>
           </div>
         </div>
+      </div>
 
-        <div class="row my-5">
-          <div class="col-lg-8 col-sm-12"></div>
-          <div class="col-lg-4 col-sm-12">
-            <div class="order-box">
-              <h3>Order summary</h3>
-              <div class="d-flex">
-                <h4>Sub Total</h4>
-                <div class="ml-auto font-weight-bold"> <?= $subtotal ?> VNĐ </div>
-              </div>
-              <div class="d-flex">
-                <h4>Discount</h4>
-                <div class="ml-auto font-weight-bold"> <?= $discount = 0 ?> VNĐ </div>
-              </div>
-              <hr class="my-1">
-              <div class="d-flex">
-                <h4>Coupon Discount</h4>
-                <div class="ml-auto font-weight-bold"> <?= $coupon_discount = 0 ?> VNĐ </div>
-              </div>
-              <div class="d-flex">
-                <h4>Tax</h4>
-                <div class="ml-auto font-weight-bold"> <?= $tax = 0 ?> VNĐ </div>
-              </div>
-              <div class="d-flex">
-                <h4>Shipping Cost</h4>
-                <div class="ml-auto font-weight-bold"> Free </div>
-              </div>
-              <hr>
-              <div class="d-flex gr-total">
-                <h5>Grand Total</h5>
-                <div class="ml-auto h5"> <?= number_format($final_total = $subtotal - $discount - $coupon_discount - $tax, 0, '', ',') ?> VNĐ </div>
-              </div>
-              <hr>
+      <div class="row my-5">
+        <div class="col-lg-8 col-sm-12"></div>
+        <div class="col-lg-4 col-sm-12">
+          <div class="order-box">
+            <h3>Order summary</h3>
+            <div class="d-flex">
+              <h4>Sub Total</h4>
+              <div class="ml-auto font-weight-bold"> <?= $subtotal ?> VNĐ </div>
             </div>
+            <div class="d-flex">
+              <h4>Discount</h4>
+              <div class="ml-auto font-weight-bold"> <?= $discount = 0 ?> VNĐ </div>
+            </div>
+            <hr class="my-1">
+            <div class="d-flex">
+              <h4>Coupon Discount</h4>
+              <div class="ml-auto font-weight-bold"> <?= $coupon_discount = 0 ?> VNĐ </div>
+            </div>
+            <div class="d-flex">
+              <h4>Tax</h4>
+              <div class="ml-auto font-weight-bold"> <?= $tax = 0 ?> VNĐ </div>
+            </div>
+            <div class="d-flex">
+              <h4>Shipping Cost</h4>
+              <div class="ml-auto font-weight-bold"> Free </div>
+            </div>
+            <hr>
+            <div class="d-flex gr-total">
+              <h5>Grand Total</h5>
+              <div class="ml-auto h5"> <?= number_format($final_total = $subtotal - $discount - $coupon_discount - $tax, 0, '', ',') ?> VNĐ </div>
+            </div>
+            <hr>
           </div>
-          <div class="col-12 d-flex shopping-box"><a href="checkout.php" class="ml-auto btn hvr-hover">Checkout</a> </div>
         </div>
-      <?php } ?>
+        <div class="col-12 d-flex shopping-box"><a href="checkout.php" class="ml-auto btn hvr-hover">Checkout</a> </div>
+      </div>
     </div>
   </div>
   <!-- End Cart -->

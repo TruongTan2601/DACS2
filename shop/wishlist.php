@@ -3,13 +3,13 @@
 <!-- Basic -->
 
 <head>
-<?php require 'modules/head.php' ?>
+  <?php require 'modules/head.php' ?>
 
 </head>
 
 <body>
   <?php include 'modules/header.php' ?>
-
+  <?php $i = 1; ?>
   <!-- Start All Title Box -->
   <div class="all-title-box">
     <div class="container">
@@ -17,7 +17,7 @@
         <div class="col-lg-12">
           <h2>Wishlist</h2>
           <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Shop</a></li>
+            <li class="breadcrumb-item"><a href="shop.php">Shop</a></li>
             <li class="breadcrumb-item active">Wishlist</li>
           </ul>
         </div>
@@ -35,87 +35,59 @@
             <table class="table">
               <thead>
                 <tr>
+                  <th>STT</th>
                   <th>Images</th>
                   <th>Product Name</th>
                   <th>Unit Price </th>
-                  <th>Stock</th>
                   <th>Add Item</th>
                   <th>Remove</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td class="thumbnail-img">
-                    <a href="#">
-                      <img class="img-fluid" src="images/img-pro-01.jpg" alt="" />
-                    </a>
-                  </td>
-                  <td class="name-pr">
-                    <a href="#">
-                      Lorem ipsum dolor sit amet
-                    </a>
-                  </td>
-                  <td class="price-pr">
-                    <p>$ 80.0</p>
-                  </td>
-                  <td class="quantity-box">In Stock</td>
-                  <td class="add-pr">
-                    <a class="btn hvr-hover" href="#">Add to Cart</a>
-                  </td>
-                  <td class="remove-pr">
-                    <a href="#">
-                      <i class="fas fa-times"></i>
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="thumbnail-img">
-                    <a href="#">
-                      <img class="img-fluid" src="images/img-pro-02.jpg" alt="" />
-                    </a>
-                  </td>
-                  <td class="name-pr">
-                    <a href="#">
-                      Lorem ipsum dolor sit amet
-                    </a>
-                  </td>
-                  <td class="price-pr">
-                    <p>$ 60.0</p>
-                  </td>
-                  <td class="quantity-box">In Stock</td>
-                  <td class="add-pr">
-                    <a class="btn hvr-hover" href="#">Add to Cart</a>
-                  </td>
-                  <td class="remove-pr">
-                    <a href="#">
-                      <i class="fas fa-times"></i>
-                    </a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="thumbnail-img">
-                    <a href="#">
-                      <img class="img-fluid" src="images/img-pro-03.jpg" alt="" />
-                    </a>
-                  </td>
-                  <td class="name-pr">
-                    <a href="#">
-                      Lorem ipsum dolor sit amet
-                    </a>
-                  </td>
-                  <td class="price-pr">
-                    <p>$ 30.0</p>
-                  </td>
-                  <td class="quantity-box">In Stock</td>
-                  <td class="add-pr">
-                    <a class="btn hvr-hover" href="#">Add to Cart</a>
-                  </td>
-                  <td class="remove-pr">
-                    <a href="#">
-                      <i class="fas fa-times"></i>
-                    </a>
-                  </td>
-                </tr>
+                <?php if (isset($wishlist) && $wishlist) { ?>
+                  <?php
+                  foreach ($wishlist as $row) {
+                  ?>
+                    <tr>
+                      <td><?= $i++ ?></td>
+                      <td class="thumbnail-img">
+                        <a href="#">
+                          <img class="img-fluid" src="../admin/img/Coffee/<?= $row['wishlistImage'] ?>" alt="" />
+                        </a>
+                      </td>
+                      <td class="name-pr">
+                        <a href="shop-detail.php?id=<?= $row['productId'] ?>">
+                          <?= $row['wishlistName'] ?>
+                        </a>
+                      </td>
+                      <td class="price-pr">
+                        <p><?= $row['wishlistPrice'] ?> VNĐ</p>
+                      </td>
+                      <td>
+                        <form method="post" action="shop.php">
+                          <input type="hidden" name="productId" value="<?= $row['productId'] ?>">
+                          <input type="hidden" name="productName" value="<?= $row['wishlistName'] ?>">
+                          <input type="hidden" name="productPrice" value="<?= $row['wishlistPrice'] ?>">
+                          <input type="hidden" name="productImage" value="<?= $row['wishlistImage'] ?>">
+                          <input type="hidden" name="productQuantity" value="1">
+                          <input class="btn hvr-hover" name="add_cart" type="submit" value="Add to Cart">
+                        </form>
+                      </td>
+                      <td class="remove-pr">
+                        <form method="post">
+                          <input type="hidden" name="wishlistId" value="<?= $row['wishlist_Id'] ?>">
+                          <input type="submit" style="border: none; background: none; cursor: pointer;" name="del_id" value="X">
+                        </form>
+                      </td>
+                    </tr>
+                  <?php } ?>
+                <?php } else { ?>
+                  <tr>
+                    <td style="text-align: center;" colspan="6">
+                      <h2>Your wishlist is empty!!!</h2>
+                    </td>
+                  </tr>
+                <?php } ?>
               </tbody>
             </table>
           </div>

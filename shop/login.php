@@ -1,23 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Basic -->
+
+<head>
+  <?php include_once 'modules/head.php' ?>
+</head>
+
 <?php
-require '../admin/connect.php';
+$user = Session::get("userUser");
 $login_check = null;
 
-if (isset($user)) {
+$today = date('d') . '-' . date('m') . '-' . date('Y') . ' ' . date("h:i:sa");
+
+if (isset($user) && $user) {
   header('Location: my-account.php');
 } else {
   if (isset($_POST['login'])) {
     try {
       $user = $_POST['userUser'];
-      $pass = $_POST['userPass']; 
-      if(empty($user) || empty($pass)){
-        $login_check = "Invalid user or password";
-      }else {
-        $pass = md5($pass);
-        $user = DB::table('tbl_user')->where('userUser',$user)->where('userPass',$pass)->first('userUser','userPass');
-        if(!$user) throw new PDOException('No result');
-        Session::set('userUSer',$user);
+      $pass = $_POST['userPass'];
 
+      if (empty($user) || empty($pass)) {
+        $login_check = "Invalid user or password";
+      } else {
+        $pass = md5($pass);
+        $user = DB::table('tbl_user')->where('userUser', $user)->where('userPass', $pass)->first('userUser', 'userPass', 'userId', 'userName', 'userEmail', 'userPhone', 'userAddress','userAvatar');
+        if (!$user) throw new PDOException('No result');
+        Session::set('userUser', $user);
         header('Location: my-account.php');
+        exit();
       }
     } catch (PDOException $th) {
       $login_check = "Invalid user or password";
@@ -25,19 +36,45 @@ if (isset($user)) {
   }
 }
 
+if (isset($_POST['register'])) {
+  try {
+    $name = $_POST['name'];
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $pass = md5($_POST['pass']);
+
+    if ($username == 'admin') {
+      $c = 'The account name cannot be used: ' . $username;
+    } else {
+      // $r = DB::table('tbl_user')->where('userEmail', $email)->orWhere('userUser', $username);
+      $conn = new PDO("mysql:host=localhost;dbname=web_mvc", 'root', '');
+
+      $sql = "SELECT * FROM tbl_user WHERE userEmail = '$email' OR userUser = '$username'";
+
+      $result = $conn->query($sql);
+
+      if ($result->fetchColumn() > 0) {
+        $c = 'Email or username already exists !!!';  
+      } else {
+        DB::table('tbl_user')->insert([
+          'userName' => $name,
+          'userEmail' => $email,
+          'userUser' => $username,
+          'userPass' => $pass,
+          'userStartdate' => $today
+        ]);
+        echo '<script>alert("Sign Up Success!!");window.location="login.php";</script>';
+      }
+    }
+  } catch (PDOException $th) {
+    $login_check = "Invalid user or password";
+  }
+}
+
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<!-- Basic -->
-
-<head>
-  <?php require 'modules/head.php' ?>
-</head>
-
 <body>
-  <?php include 'modules/header.php' ?>
-
+  <?php include_once 'modules/header.php' ?>
   <!-- Start All Title Box -->
   <div class="all-title-box">
     <div class="container">
@@ -45,8 +82,8 @@ if (isset($user)) {
         <div class="col-lg-12">
           <h2>Checkout</h2>
           <ul class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.php">Shop</a></li>
-            <li class="breadcrumb-item active">Checkout</li>
+            <li class="breadcrumb-item"><a href="my-account.php">Account</a></li>
+            <li class="breadcrumb-item active">Login</li>
           </ul>
         </div>
       </div>
@@ -77,39 +114,47 @@ if (isset($user)) {
             <button type="submit" name="login" class="btn hvr-hover">Login</button>
           </form>
           <span style="color: red;">
-              <?php
-              if (isset($login_check)) {
-                echo $login_check;
-              }
-              ?>
-            </span>
+            <?php
+            if (isset($login_check)) {
+              echo $login_check;
+            }
+            ?>
+          </span>
         </div>
         <div class="col-sm-6 col-lg-6 mb-3">
           <div class="title-left">
             <h3>Create New Account</h3>
           </div>
           <h5><a data-toggle="collapse" href="#formRegister" role="button" aria-expanded="false">Click here to Register</a></h5>
-          <form class="mt-3 collapse review-form-box" id="formRegister">
+          <form class="mt-3 collapse review-form-box" id="formRegister" method="post">
+            <input type="hidden" name="date" value="<?= $today ?>">
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="InputName" class="mb-0">First Name</label>
-                <input type="text" class="form-control" id="InputName" placeholder="First Name">
+                <label for="InputName" class="mb-0">Full Name</label>
+                <input type="text" class="form-control" id="InputName" name="name" placeholder="Full Name" required>
               </div>
               <div class="form-group col-md-6">
-                <label for="InputLastname" class="mb-0">Last Name</label>
-                <input type="text" class="form-control" id="InputLastname" placeholder="Last Name">
+                <label for="InputLastname" class="mb-0">User Name</label>
+                <input type="text" class="form-control" id="InputLast_name" name="username" placeholder="User Name" required>
               </div>
               <div class="form-group col-md-6">
                 <label for="InputEmail1" class="mb-0">Email Address</label>
-                <input type="email" class="form-control" id="InputEmail1" placeholder="Enter Email">
+                <input type="email" class="form-control" id="InputEmail1" name="email" placeholder="Enter Email" required>
               </div>
               <div class="form-group col-md-6">
                 <label for="InputPassword1" class="mb-0">Password</label>
-                <input type="password" class="form-control" id="InputPassword1" placeholder="Password">
+                <input type="password" class="form-control" id="InputPassword1" name="pass" placeholder="Password" required>
               </div>
             </div>
-            <button type="submit" class="btn hvr-hover">Register</button>
+            <button type="submit" name="register" class="btn hvr-hover">Register</button>
           </form>
+          <span style="color: red;">
+            <?php
+            if (isset($c)) {
+              echo $c;
+            }
+            ?>
+          </span>
         </div>
       </div>
     </div>

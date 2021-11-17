@@ -10,14 +10,8 @@ $tbl_staff = DB::table("tbl_staff")->get();
 <html lang="en" dir="ltr">
 
 <head>
-  <meta charset="UTF-8">
-  <!--<title> Responsive Sidebar Menu  | CodingLab </title>-->
-  <link rel="stylesheet" href="./css/admin.css">
-  <!-- Boxicons CDN Link -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
-  <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php require 'modules/head.php' ?>
+  <title>ADMIN | Product</title>
 </head>
 
 <body>
@@ -37,7 +31,7 @@ $tbl_staff = DB::table("tbl_staff")->get();
                   <th>Name</th>
                   <th>Email</th>
                   <th>Phone</th>
-                  <th>Date of birth</th>
+                  <th>Address</th>
                   <th>Start date</th>
                   <th>Amount spent</th>
                 </tr>
@@ -47,7 +41,7 @@ $tbl_staff = DB::table("tbl_staff")->get();
                   <th>Name</th>
                   <th>Email</th>
                   <th>Phone</th>
-                  <th>Date of birth</th>
+                  <th>Address</th>
                   <th>Start date</th>
                   <th>Amount spent</th>
                 </tr>
@@ -58,9 +52,9 @@ $tbl_staff = DB::table("tbl_staff")->get();
                     <td><?= $row["userName"] ?></td>
                     <td><?= $row["userEmail"] ?></td>
                     <td><?= $row["userPhone"] ?></td>
-                    <td><?= $row["userBirth"] ?></td>
+                    <td><?= $row["userAddress"] ?></td>
                     <td><?= $row["userStartdate"] ?></td>
-                    <td><?= $row["userAmount"] ?></td>
+                    <td><?= DB::table('bill')->where('userId', $row['userId'])->sum('subtotal') ?></td>
                   </tr>
                 <?php } ?>
               </tbody>
@@ -174,7 +168,7 @@ $tbl_staff = DB::table("tbl_staff")->get();
               </div>
             </div>
             <div class="text-right">
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-dark">Submit</button>
             </div>
           </form>
         </div>

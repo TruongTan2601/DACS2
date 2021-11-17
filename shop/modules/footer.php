@@ -44,7 +44,7 @@
       <div class="row">
         <div class="col-lg-4 col-md-12 col-sm-12">
           <div class="footer-widget">
-            <h4>About Freshshop</h4>
+            <h4>About Tre-Coffee</h4>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
           </div>
@@ -67,7 +67,7 @@
             <h4>Contact Us</h4>
             <ul>
               <li>
-                <p><i class="fas fa-map-marker-alt"></i>Address: 110-112 Thu Khoa Huan Street <br>An Hai Dong, Son Tra,<br> Da Nang City </p>
+                <p><i class="fas fa-map-marker-alt"></i>Address: <a href="contact-us.php"> 110-112 Thu Khoa Huan Street <br>An Hai Dong, Son Tra,<br> Da Nang City </a></p>
               </li>
               <li>
                 <p><i class="fas fa-phone-square"></i>Phone: <a href="tel:0329 734 008">0329 734 008</a></p>

@@ -54,11 +54,18 @@
       <span class="tooltip">Order</span>
     </li>
     <li>
-      <a href="#">
-        <i class="bx bx-heart"></i>
-        <span class="links_name">Saved</span>
+      <a href="booking.php">
+        <i class="fas fa-couch"></i>
+        <span class="links_name">Booking</span>
       </a>
-      <span class="tooltip">Saved</span>
+      <span class="tooltip">Booking</span>
+    </li>
+    <li>
+      <a href="blogs.php">
+        <i class="far fa-newspaper"></i>
+        <span class="links_name">Blogs</span>
+      </a>
+      <span class="tooltip">Blogs</span>
     </li>
     <li>
       <a href="image.php">
