@@ -4,7 +4,22 @@ $blogId = $_GET['id'];
 $tbl_blogs = DB::table('tbl_blogs')->find('blogId', $blogId);
 $tbl_blog = DB::table('tbl_blogs')->get();
 // var_dump($tbl_blogs);
-
+$today = date('d') . '-' . date('m') . '-' . date('Y') . ' ' . date("h:i:sa");
+if (isset($_POST['submit'])) {
+  $ids = $_POST['id'];
+  $name = $_POST['name'];
+  $email = $_POST['email'];
+  $comment = $_POST['msg'];
+  DB::table('cmt_blogs')->insert([
+    'userId' => $ids,
+    'cmtDate' => $today,
+    'cmtName' => $name,
+    'cmtContent' => $comment,
+    'cmtEmail'=> $email,
+    'blogId' => $blogId
+  ]);
+}
+$stmt = DB::table('cmt_blogs')->limit(5)->orderBy('cmt_Id', 'DESC')->where('blogId', $blogId)->get();
 ?>
 
 <!DOCTYPE html>
@@ -20,6 +35,29 @@ $tbl_blog = DB::table('tbl_blogs')->get();
   <title>Blog</title>
   <link rel="stylesheet" href="css/theme.css">
   <?php require 'modules/head.php' ?>
+  <style>
+    .comment {
+      padding: 20px 20px 30px;
+      position: relative;
+      background: #f8f8f8;
+    }
+
+    .entriesContainer .comments-list .img {
+      border: 2px solid #ed5f5e;
+      color: #ed5f5e;
+      float: left;
+      height: 35px;
+      width: 35px;
+      line-height: 31px;
+      margin-top: 5px;
+      text-align: center;
+    }
+
+    .entriesContainer .comments-list .commentContent {
+      margin-bottom: 15px;
+      margin-left: 50px;
+    }
+  </style>
 
 </head>
 
@@ -72,7 +110,7 @@ $tbl_blog = DB::table('tbl_blogs')->get();
                 </div>
               </div>
               <div class="post-content">
-                <?php $read = file("../admin/txt/".$tbl_blogs['blogDescription']); ?>
+                <?php $read = file("../admin/txt/" . $tbl_blogs['blogDescription']); ?>
 
                 <?php foreach ($read as $line) { ?>
                   <p style="text-indent: 20px;text-align: justify;font-size: 17px;"><?= $line ?></p>
@@ -87,35 +125,62 @@ $tbl_blog = DB::table('tbl_blogs')->get();
                 </div>
               </div>
             </div> <!-- .blog-single-wrap -->
+            <div class="entriesContainer">
+              <!--Comments and replys-->
+              <?php foreach ($stmt as $row) { ?>
+                <ul class="comments-list clearfix">
+                  <li>
+                    <div class="comment">
+                      <div class="img">
+                        <i class="fa fa-user"></i>
+                      </div>
+                      <div class="commentContent">
+                        <div class="commentsInfo">
+                          <div class="author"><?= $row['cmtName'] ?></div>
+                          <div class="date">
+                            <a href="#"><?= $row['cmtDate'] ?></a>
+                          </div>
+                        </div>
+                        <p class="expert"><?= $row['cmtContent'] ?></p>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              <?php } ?>
+              <!--End comments and replys-->
+            </div>
 
             <div class="comment-form-wrap pt-5">
               <h3 class="mb-5">Leave a comment</h3>
-              <form action="#" class="">
-                <div class="form-row form-group">
-                  <div class="col-md-6">
-                    <label for="name">Name *</label>
-                    <input type="text" class="form-control" id="name">
+              <?php if (isset($user['userId']) && $user['userId']) { ?>
+                <form action="" method="POST" class="">
+                  <input type="hidden" name="id" value="<?= $user['userId'] ?>">
+                  <input type="hidden" name="date" value="<?= $today ?>">
+                  <div class="form-row form-group">
+                    <div class="col-md-6">
+                      <label for="name">Name *</label>
+                      <input type="text" class="form-control" id="name" name="name" value="<?= $user['userName'] ?>">
+                    </div>
+                    <div class="col-md-6">
+                      <label for="email">Email *</label>
+                      <input type="email" class="form-control" id="email" name="email" value="<?= $user['userEmail'] ?>">
+                    </div>
                   </div>
-                  <div class="col-md-6">
-                    <label for="email">Email *</label>
-                    <input type="email" class="form-control" id="email">
+                  <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea name="msg" id="message" cols="30" rows="8" class="form-control"></textarea>
                   </div>
-                </div>
-                <div class="form-group">
-                  <label for="website">Website</label>
-                  <input type="url" class="form-control" id="website">
-                </div>
+                  <div class="form-group">
+                    <button class="btn hvr-hover" style="color: #fff;font-size: 16px;font-weight: 500;" type="submit" name="submit">Post a comment</button>
+                  </div>
 
-                <div class="form-group">
-                  <label for="message">Message</label>
-                  <textarea name="msg" id="message" cols="30" rows="8" class="form-control"></textarea>
+                </form>
+              <?php } else { ?>
+                <div class="col-12">
+                  <button class="btn hvr-hover" style="color: #fff;font-size: 16px;font-weight: 500;" type="submit"><a href="login.php" style="color: #fff;">You need to login to comment</a></button>
                 </div>
-                <div class="form-group">
-                  <input type="submit" value="Post Comment" class="btn btn-primary">
-                </div>
-
-              </form>
-            </div> <!-- .comment-form-wrap -->
+              <?php } ?>
+            </div>
           </div>
 
           <div class="col-lg-4">
@@ -124,17 +189,17 @@ $tbl_blog = DB::table('tbl_blogs')->get();
               <div class="widget-box">
                 <h3 class="widget-title">Recent Blog</h3>
                 <div class="divider"></div>
-                <?php foreach($tbl_blog as $row){ ?>
-                <div class="blog-item">
-                  <div class="content">
-                    <h6 class="post-title"><a href="blog-detail.php?id=<?= $row['blogId'] ?>"><?= $row['blogName'] ?></a></h6>
-                    <div class="meta">
-                      <a href="#"><span class="mai-calendar"></span> <?= $row['blogUpDate'] ?></a>
-                      <a href="#"><span class="mai-person"></span> Admin</a>
-                      <!-- <a href="#"><span class="mai-chatbubbles"></span> 19</a> -->
+                <?php foreach ($tbl_blog as $row) { ?>
+                  <div class="blog-item">
+                    <div class="content">
+                      <h6 class="post-title"><a href="blog-detail.php?id=<?= $row['blogId'] ?>"><?= $row['blogName'] ?></a></h6>
+                      <div class="meta">
+                        <a href="#"><span class="mai-calendar"></span> <?= $row['blogUpDate'] ?></a>
+                        <a href="#"><span class="mai-person"></span> Admin</a>
+                        <!-- <a href="#"><span class="mai-chatbubbles"></span> 19</a> -->
+                      </div>
                     </div>
                   </div>
-                </div>
                 <?php } ?>
               </div>
 

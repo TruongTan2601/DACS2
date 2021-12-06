@@ -275,12 +275,12 @@
                   </div>
                   <div class="d-flex">
                     <h4>Discount</h4>
-                    <div class="ml-auto font-weight-bold"> <?= $discount = 0 ?> VNĐ </div>
+                    <div class="ml-auto font-weight-bold"> <?= $discount = $subtotal *  $row['coupon']/100 ?> VNĐ </div>
                   </div>
                   <hr class="my-1">
                   <div class="d-flex">
                     <h4>Coupon Discount</h4>
-                    <div class="ml-auto font-weight-bold"> <?= $coupon_discount = 0 ?> VNĐ </div>
+                    <div class="ml-auto font-weight-bold"> <?= $coupon_discount = $row['coupon'] ?> % </div>
                   </div>
                   <div class="d-flex">
                     <h4>Tax</h4>
@@ -295,7 +295,7 @@
                   <hr>
                   <div class="d-flex gr-total">
                     <h5>Grand Total</h5>
-                    <div class="ml-auto h5"> <?= number_format($final_total = $subtotal - $discount - $coupon_discount - $tax, 0, '', ',') ?> VNĐ </div>
+                    <div class="ml-auto h5"> <?= number_format($final_total = $subtotal - $discount - $tax, 0, '', ',') ?> VNĐ </div>
                   </div>
                   <hr>
                 </div>

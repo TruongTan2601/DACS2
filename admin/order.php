@@ -198,7 +198,7 @@ if (isset($_POST['submit'])) {
       <div id="update-form" class="modal x-display">
         <div class="modal-content">
           <span id="edit-close" class="close">&times;</span>
-          <div class="col-md-12 col-md-offset-3" id="form_container">
+          <div class="col-md-12" id="form_container">
             <h2>Form</h2>
             <p>
               Please check name and phone number information!!

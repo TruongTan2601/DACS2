@@ -6,44 +6,51 @@
   <?php require 'modules/head.php' ?>
 
 </head>
-<?php
-if (isset($_POST['add_cart'])) {
-  $productId = $_POST['productId'];
-  $productImage = $_POST['productImage'];
-  $productName = $_POST['productName'];
-  $productPrice = $_POST['productPrice'];
-  $productQuantity = $_POST['productQuantity'];
-
-  $user = Session::get("userUser");
-  $item = DB::table('cart')->where('productId', $productId)->where('userId', $user['userId'])->first();
-
-  if (!isset($item['cartQuantity'])) {
-    DB::table('cart')->insert([
-      'productId' => $productId,
-      'cartName' => $productName,
-      'cartImage' => $productImage,
-      'cartPrice' => $productPrice,
-      'cartQuantity' => $productQuantity,
-      'userId' => $user['userId']
-    ]);
-  } else {
-    $Quantity = $item['cartQuantity'] + $productQuantity;
-    DB::table('cart')->where('productId', $productId)->where('userId', $user['userId'])->update(['cartQuantity' => $Quantity]);
-  }
-}
-
-if (isset($_POST['del_id'])) {
-  $id = $_POST['cartId'];
-  DB::table('cart')->where('cartId',$id)->delete();
-}
-
-if (isset($_POST['delete_cart'])) {
-  DB::table('cart')->where('userId',$user['userId'])->delete();
-}
-?>
 
 <body>
   <?php include 'modules/header.php' ?>
+  <?php
+  $coupon_discount = 0;
+
+  if (isset($_POST['add_cart'])) {
+    $productId = $_POST['productId'];
+    $productImage = $_POST['productImage'];
+    $productName = $_POST['productName'];
+    $productPrice = $_POST['productPrice'];
+    $productQuantity = $_POST['productQuantity'];
+
+    $user = Session::get("userUser");
+    $item = DB::table('cart')->where('productId', $productId)->where('userId', $user['userId'])->first();
+
+    if (!isset($item['cartQuantity'])) {
+      DB::table('cart')->insert([
+        'productId' => $productId,
+        'cartName' => $productName,
+        'cartImage' => $productImage,
+        'cartPrice' => $productPrice,
+        'cartQuantity' => $productQuantity,
+        'userId' => $user['userId']
+      ]);
+    } else {
+      $Quantity = $item['cartQuantity'] + $productQuantity;
+      DB::table('cart')->where('productId', $productId)->where('userId', $user['userId'])->update(['cartQuantity' => $Quantity]);
+    }
+  }
+
+  if (isset($_POST['del_id'])) {
+    $id = $_POST['cartId'];
+    DB::table('cart')->where('cartId', $id)->delete();
+  }
+
+  if (isset($_POST['delete_cart'])) {
+    DB::table('cart')->where('userId', $user['userId'])->delete();
+  }
+
+  if (isset($_POST['coupon'])) {
+    $coupon_discount = $_POST['couponId'];
+    DB::table('cart')->where('userId', $user['userId'])->update(['coupon' => $coupon_discount]);
+  }
+  ?>
 
   <!-- Start All Title Box -->
   <div class="all-title-box">
@@ -66,7 +73,7 @@ if (isset($_POST['delete_cart'])) {
     <div class="container">
       <?php
       $subtotal = 0;
-      $i=1;
+      $i = 1;
       ?>
       <div class="row">
         <div class="col-lg-12">
@@ -90,7 +97,7 @@ if (isset($_POST['delete_cart'])) {
                     $total = $row['cartPrice'] * $row['cartQuantity'];
                     $subtotal += $total;
                   ?>
-                    <tr>  
+                    <tr>
                       <td><?= $i++ ?></td>
                       <td class="thumbnail-img">
                         <a href="#">
@@ -153,7 +160,28 @@ if (isset($_POST['delete_cart'])) {
       </div>
 
       <div class="row my-5">
-        <div class="col-lg-8 col-sm-12"></div>
+        <?php foreach (DB::table('coupon')->get() as $row) { ?>
+          <div class="col-lg-8 col-sm-12" style="padding-bottom: 20px;">
+            <div class="icon-coupon" style="float: left;">
+              <i class="fa fa-gift" style="font-size: 45px; padding-right: 25px;" aria-hidden="true"></i>
+            </div>
+            <div class="coupon" style="float: left;">
+              <div class="coupon-name">
+                <h3><?= $row['couponName'] ?></h3>
+              </div>
+              <div class="coupon-g">
+                <?= $row['couponContent'] ?>
+              </div>
+            </div>
+            <div class="coupon-click" style="float: right; padding-right: 180px;">
+              <form method="post">
+                <input type="hidden" name="couponId" value="<?= $row['couponDiscount'] ?>">
+                <input type="submit" name="coupon" class="btn hvr-hover" style="color: #fff;" value="USE COUPON">
+              </form>
+            </div>
+          </div>
+        <?php } ?>
+
         <div class="col-lg-4 col-sm-12">
           <div class="order-box">
             <h3>Order summary</h3>
@@ -163,12 +191,12 @@ if (isset($_POST['delete_cart'])) {
             </div>
             <div class="d-flex">
               <h4>Discount</h4>
-              <div class="ml-auto font-weight-bold"> <?= $discount = 0 ?> VNĐ </div>
+              <div class="ml-auto font-weight-bold"> <?= $discount = $subtotal*$coupon_discount/100 ?> VNĐ </div>
             </div>
             <hr class="my-1">
             <div class="d-flex">
               <h4>Coupon Discount</h4>
-              <div class="ml-auto font-weight-bold"> <?= $coupon_discount = 0 ?> VNĐ </div>
+              <div class="ml-auto font-weight-bold"> <?= $coupon_discount ?> % </div>
             </div>
             <div class="d-flex">
               <h4>Tax</h4>
@@ -181,12 +209,12 @@ if (isset($_POST['delete_cart'])) {
             <hr>
             <div class="d-flex gr-total">
               <h5>Grand Total</h5>
-              <div class="ml-auto h5"> <?= number_format($final_total = $subtotal - $discount - $coupon_discount - $tax, 0, '', ',') ?> VNĐ </div>
+              <div class="ml-auto h5"> <?= number_format($final_total = $subtotal - $discount - $tax, 0, '', ',') ?> VNĐ </div>
             </div>
             <hr>
           </div>
         </div>
-        <div class="col-12 d-flex shopping-box"><a href="checkout.php" class="ml-auto btn hvr-hover">Checkout</a> </div>
+        <div class="col-12 d-flex shopping-box"><a href="checkout.php" style="color: #fff;" class="ml-auto btn hvr-hover">Checkout</a> </div>
       </div>
     </div>
   </div>

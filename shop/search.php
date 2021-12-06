@@ -80,11 +80,6 @@ if (isset($_POST['search'])) {
         </div>
         <?php } ?>
       </div>
-
-
-
-
-
     </div>
   </div>
   <!-- End Cart -->

@@ -55,6 +55,15 @@ class Session
     }
   }
 
+  public static function checkSessionStaff()
+  {
+    self::init();
+    if (self::get("staffUser") == false) {
+      self::destroy();
+      header("Location:login.php");
+    }
+  }
+
   public static function checkLogin()
   {
     self::init();

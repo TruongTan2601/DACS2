@@ -8,7 +8,9 @@
   <ul class="nav-list">
     <li>
       <i class="bx bx-search"></i>
-      <input type="text" placeholder="Search..." />
+      <form action="search.php" method="post">
+        <input type="text" name="search" id="search" placeholder="Search..." />
+      </form>
       <span class="tooltip">Search</span>
     </li>
     <li>
@@ -73,6 +75,13 @@
         <span class="links_name">Image</span>
       </a>
       <span class="tooltip">Image</span>
+    </li>
+    <li>
+      <a href="coupon.php">
+        <i class="fa fa-tag fa-stack"></i>
+        <span class="links_name">Coupon</span>
+      </a>
+      <span class="tooltip">Coupon</span>
     </li>
     <li>
       <a href="#">

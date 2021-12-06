@@ -164,19 +164,19 @@
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
           <div class="shop-cat-box">
             <img class="img-fluid" src="images/coffee.jpg" alt="" />
-            <a class="btn hvr-hover" href="shop.php">Coffee</a>
+            <a class="btn hvr-hover" href="shop.php?list=CoffeeViet">Coffee</a>
           </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
           <div class="shop-cat-box">
             <img class="img-fluid" src="images/yogurt.jpg" alt="" />
-            <a class="btn hvr-hover" href="shop.php">Yogurt</a>
+            <a class="btn hvr-hover" href="shop.php?list=Yogurt">Yogurt</a>
           </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
           <div class="shop-cat-box">
             <img class="img-fluid" src="images/juice.jpg" alt="" />
-            <a class="btn hvr-hover" href="shop.php">Juice</a>
+            <a class="btn hvr-hover" href="shop.php?list=Juice">Juice</a>
           </div>
         </div>
       </div>
