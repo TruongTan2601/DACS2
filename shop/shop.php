@@ -72,8 +72,8 @@ if (isset($_POST['add_wishlist'])) {
 }
 // $list;
 if ((isset($_GET['list'])) && ($_GET['list'])) {
-  $tbl_product = DB::table('tbl_product')->where('brandID',$_GET['list'])->orderBy('productPrice')->get();
-  $i = DB::table('tbl_product')->where('brandID',$_GET['list'])->count();
+  $tbl_product = DB::table('tbl_product')->where('brandID', $_GET['list'])->orderBy('productPrice')->get();
+  $i = DB::table('tbl_product')->where('brandID', $_GET['list'])->count();
 }
 ?>
 
@@ -130,8 +130,8 @@ if ((isset($_GET['list'])) && ($_GET['list'])) {
             <div class="product-categorie-box">
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade show active" id="grid-view">
-                  <div class="row">
-                    <?php foreach ($tbl_product as $row) { ?> 
+                  <div class="row list_product">
+                    <?php foreach ($tbl_product as $row) { ?>
                       <div class="col-sm-6 col-md-6 col-lg-4 col-xl-4">
                         <form action="shop.php" method="POST">
                           <input type="hidden" name="productId" value="<?= $row['productId'] ?>">
@@ -214,11 +214,24 @@ if ((isset($_GET['list'])) && ($_GET['list'])) {
             </div>
           </div>
         </div>
+        <script src="js/jquery-3.2.1.min.js"></script>
+        <script>
+          $(document).ready(function() {
+            $('.search_product').keyup(function() {
+              var txt = $('.search_product').val()
+              $.post('ajax/list_product.php', {
+                data: txt
+              }, function(data) {
+                $('.list_product').html(data)
+              })
+            })
+          });
+        </script>
         <div class="col-xl-3 col-lg-3 col-sm-12 col-xs-12 sidebar-shop-left">
           <div class="product-categori">
             <div class="search-product">
               <form action="#">
-                <input class="form-control" placeholder="Search here..." type="text">
+                <input class="form-control search_product" placeholder="Search here..." type="text">
                 <button type="submit"> <i class="fa fa-search"></i> </button>
               </form>
             </div>
@@ -350,7 +363,6 @@ if ((isset($_GET['list'])) && ($_GET['list'])) {
   <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
   <!-- ALL JS FILES -->
-  <script src="js/jquery-3.2.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <!-- ALL PLUGINS -->
@@ -367,8 +379,8 @@ if ((isset($_GET['list'])) && ($_GET['list'])) {
   <script src="js/form-validator.min.js"></script>
   <script src="js/contact-form-script.js"></script>
   <script src="js/custom.js"></script>
-
   <script src="js/script.js"></script>
+  <script src="js/sweetalert.min.js"></script>
 </body>
 
 </html>

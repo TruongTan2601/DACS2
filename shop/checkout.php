@@ -6,9 +6,14 @@
   <?php require 'modules/head.php' ?>
   <?php
   $user = Session::get("userUser");
-
   if (isset($user) && $user) {
+    $q=0;
     $cart = DB::table('cart')->where('userId', $user['userId'])->get();
+    if ($cart[$q]== "") {
+      echo '<script>alert("Cart your empty!!! Back to sidebar shop!!!"); window.location="shop.php";</script>';
+    }
+  }else{
+    header('Location: login.php');
   }
 
   $today = date('d') . '-' . date('m') . '-' . date('Y') . ' ' . date("h:i:sa");
@@ -32,8 +37,9 @@
       'billDate' => $billDate,
       'billAddress' => $address,
       'billPhone' => $billPhone,
-      'subtotal' => $subtotal,
-      'month' =>$month
+      'subtotal' => $subtotal*(100-$row['coupon'])/100,
+      'month' =>$month,
+      'coupon' => $row['coupon']
     ]);
 
     $s = DB::table('bill')->where('billDate', $billDate)->get();
@@ -52,7 +58,7 @@
       ]);
     }
     DB::table('cart')->where('userId', $user['userId'])->delete();
-    header('Location: index.php');
+    echo '<script>alert("Thanks for your order!!!");window.location="index.php"</script>';
   }
   
   ?>
@@ -60,7 +66,7 @@
 
 <body>
   <?php include 'modules/header.php' ?>
-
+<script>swal("Hello world!");</script>
   <!-- Start All Title Box -->
   <div class="all-title-box">
     <div class="container">
@@ -421,8 +427,8 @@
   <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
   <!-- ALL JS FILES -->
-  <script src="js/jquery-3.2.1.min.js"></script>
-  <script src="js/popper.min.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <!-- ALL PLUGINS -->
   <script src="js/jquery.superslides.min.js"></script>
@@ -436,6 +442,7 @@
   <script src="js/form-validator.min.js"></script>
   <script src="js/contact-form-script.js"></script>
   <script src="js/custom.js"></script>
+  <script src="js/sweetalert.min.js"></script>
 </body>
 
 </html>

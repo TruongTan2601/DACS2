@@ -183,7 +183,6 @@
     </div>
   </div>
   <!-- End Categories -->
-
   <section class="banner">
     <h2>BOOK YOUR TABLE NOW</h2>
     <div class="card-container">
@@ -221,7 +220,7 @@
           </div>
 
           <div class="form-row">
-            <input type="number" placeholder="How Many Persons?" min="1" name="people" required required_msg="Please select the number of people!">
+            <input type="number" placeholder="How Many Persons?" min="1" max="30" name="people" required required_msg="Please select the number of people!">
             <input type="submit" name="reservation" value="BOOK TABLE" />
           </div>
         </form>
@@ -306,7 +305,6 @@
     </div>
   </div>
   <!-- End Products  -->
-
   <!-- Start Blog  -->
   <div class="latest-blog">
     <div class="container">
@@ -474,6 +472,7 @@
   <script src="js/form-validator.min.js"></script>
   <script src="js/contact-form-script.js"></script>
   <script src="js/custom.js"></script>
+  <script src="js/sweetalert.min.js"></script>
 </body>
 
 </html>

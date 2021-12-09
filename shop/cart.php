@@ -136,12 +136,22 @@
           </div>
         </div>
       </div>
-
+      <script src="js/jquery-3.2.1.min.js"></script>
+      <script>
+        $(document).ready(function() {
+          $('.search_coupon').keyup(function() {
+            var txt = $('.search_coupon').val()
+            $.post('ajax/list_coupon.php', {data: txt}, function (data) {
+              $('.list_coupon').html(data)
+            })
+          })
+        });
+      </script>
       <div class="row my-5">
         <div class="col-lg-6 col-sm-6">
           <div class="coupon-box">
             <div class="input-group input-group-sm">
-              <input class="form-control" placeholder="Enter your coupon code" aria-label="Coupon code" type="text">
+              <input class="search_coupon form-control" placeholder="Enter your coupon code" aria-label="Coupon code" type="text">
               <div class="input-group-append">
                 <button class="btn btn-theme" type="button">Apply Coupon</button>
               </div>
@@ -161,25 +171,29 @@
 
       <div class="row my-5">
         <?php foreach (DB::table('coupon')->get() as $row) { ?>
-          <div class="col-lg-8 col-sm-12" style="padding-bottom: 20px;">
-            <div class="icon-coupon" style="float: left;">
-              <i class="fa fa-gift" style="font-size: 45px; padding-right: 25px;" aria-hidden="true"></i>
-            </div>
-            <div class="coupon" style="float: left;">
-              <div class="coupon-name">
-                <h3><?= $row['couponName'] ?></h3>
+          <?php $times = floor((time() - strtotime($row['couponEndDate'])) / (60 * 60 * 24)) ?>
+          <?php if ($times <= 0) { ?>
+            <div class="col-lg-8 col-sm-12 list_coupon" style="padding-bottom: 20px;">
+              <div class="icon-coupon" style="float: left;">
+                <i class="fa fa-gift" style="font-size: 45px; padding-right: 25px;" aria-hidden="true"></i>
               </div>
-              <div class="coupon-g">
-                <?= $row['couponContent'] ?>
+              <div class="coupon" style="float: left;">
+                <div class="coupon-name">
+                  <h3><?= $row['couponName'] ?></h3>
+                </div>
+                <div class="coupon-g">
+                  <?= $row['couponContent'] ?>
+                </div>
+              </div>
+              <div class="coupon-click" style="float: right; padding-right: 180px;">
+                <form method="post">
+                  <input type="hidden" name="couponId" value="<?= $row['couponDiscount'] ?>">
+                  <input type="submit" name="coupon" class="btn hvr-hover" style="color: #fff;" value="USE COUPON">
+                </form>
               </div>
             </div>
-            <div class="coupon-click" style="float: right; padding-right: 180px;">
-              <form method="post">
-                <input type="hidden" name="couponId" value="<?= $row['couponDiscount'] ?>">
-                <input type="submit" name="coupon" class="btn hvr-hover" style="color: #fff;" value="USE COUPON">
-              </form>
-            </div>
-          </div>
+          <?php } else {
+          } ?>
         <?php } ?>
 
         <div class="col-lg-4 col-sm-12">
@@ -191,7 +205,7 @@
             </div>
             <div class="d-flex">
               <h4>Discount</h4>
-              <div class="ml-auto font-weight-bold"> <?= $discount = $subtotal*$coupon_discount/100 ?> VNĐ </div>
+              <div class="ml-auto font-weight-bold"> <?= $discount = $subtotal * $coupon_discount / 100 ?> VNĐ </div>
             </div>
             <hr class="my-1">
             <div class="d-flex">
@@ -307,7 +321,6 @@
   </div>
   <!-- End Instagram Feed  -->
 
-
   <!-- Start Footer  -->
   <?php include 'modules/footer.php' ?>
   <!-- End Footer  -->
@@ -315,7 +328,7 @@
   <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
   <!-- ALL JS FILES -->
-  <script src="js/jquery-3.2.1.min.js"></script>
+
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <!-- ALL PLUGINS -->

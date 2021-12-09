@@ -197,7 +197,7 @@ if (isset($_POST['delete'])) {
         <div class="modal-content">
           <span id="edit-close" class="close">&times;</span>
           <div>
-            <h1>Cập nhật thông tin</h1>
+            <h1>Update information</h1>
           </div>
           <div class="update-form">
             <form method="POST">
@@ -230,7 +230,7 @@ if (isset($_POST['delete'])) {
     <?php  } ?>
   </section>
   <section class="home-section">
-    <div class="text"><span onclick="showupload();"><i class="far fa-folder-open"></i> Upload Products</span></div>
+    <div class="text"><span onclick="showupload();"><i class="far fa-folder-open"></i> Upload New Blogs</span></div>
     <div class="block pt-3 uploadpro hidden">
       <form action="" class="needs-validation" novalidate method="POST" enctype="multipart/form-data">
         <div class="text-left">
