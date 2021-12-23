@@ -112,7 +112,7 @@
                       <td class="price-pr">
                         <p><?= $row['cartPrice'] ?> VNĐ</p>
                       </td>
-                      <td class="quantity-box"><input type="number" size="4" value="<?= $row['cartQuantity'] ?>" min="0" step="1" class="c-input-text qty text"></td>
+                      <td class="quantity-box"><input type="number" size="4" value="<?= $row['cartQuantity'] ?>" min="0" max="50" step="1" class="c-input-text qty text"></td>
                       <td class="total-pr">
                         <p><?= $total ?> VNĐ</p>
                       </td>
@@ -141,14 +141,16 @@
         $(document).ready(function() {
           $('.search_coupon').keyup(function() {
             var txt = $('.search_coupon').val()
-            $.post('ajax/list_coupon.php', {data: txt}, function (data) {
+            $.post('ajax/list_coupon.php', {
+              data: txt
+            }, function(data) {
               $('.list_coupon').html(data)
             })
           })
         });
       </script>
       <div class="row my-5">
-        <div class="col-lg-6 col-sm-6">
+        <div class="col-lg-7 col-sm-7">
           <div class="coupon-box">
             <div class="input-group input-group-sm">
               <input class="search_coupon form-control" placeholder="Enter your coupon code" aria-label="Coupon code" type="text">
@@ -158,7 +160,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-6 col-sm-6">
+        <div class="col-lg-5 col-sm-5">
           <div class="update-box">
             <form method="POST">
               <input type="hidden" name="id">
@@ -170,31 +172,35 @@
       </div>
 
       <div class="row my-5">
-        <?php foreach (DB::table('coupon')->get() as $row) { ?>
-          <?php $times = floor((time() - strtotime($row['couponEndDate'])) / (60 * 60 * 24)) ?>
-          <?php if ($times <= 0) { ?>
-            <div class="col-lg-8 col-sm-12 list_coupon" style="padding-bottom: 20px;">
-              <div class="icon-coupon" style="float: left;">
-                <i class="fa fa-gift" style="font-size: 45px; padding-right: 25px;" aria-hidden="true"></i>
-              </div>
-              <div class="coupon" style="float: left;">
-                <div class="coupon-name">
-                  <h3><?= $row['couponName'] ?></h3>
+
+        <div class="col-lg-8 col-sm-12 list_coupon" style="padding-bottom: 20px;">
+          <?php foreach (DB::table('coupon')->get() as $row) { ?>
+            <?php $times = floor((time() - strtotime($row['couponEndDate'])) / (60 * 60 * 24)) ?>
+            <?php if ($times <= 0) { ?>
+              <div class="row coupon_s" style="padding-bottom: 20px;">
+                <div class="col-md-1 icon-coupon">
+                  <i class="fa fa-gift" style="font-size: 45px; padding-right: 25px;" aria-hidden="true"></i>
                 </div>
-                <div class="coupon-g">
-                  <?= $row['couponContent'] ?>
+                <div class="col-md-7 coupon">
+                  <div class="coupon-name">
+                    <h3><?= $row['couponName'] ?></h3>
+                  </div>
+                  <div class="coupon-g">
+                    <?= $row['couponContent'] ?>
+                  </div>
+                </div>
+                <div class="col-md-3 coupon-click">
+                  <form method="post">
+                    <input type="hidden" name="couponId" value="<?= $row['couponDiscount'] ?>">
+                    <input type="submit" name="coupon" class="btn hvr-hover" style="color: #fff;" value="USE COUPON">
+                  </form>
                 </div>
               </div>
-              <div class="coupon-click" style="float: right; padding-right: 180px;">
-                <form method="post">
-                  <input type="hidden" name="couponId" value="<?= $row['couponDiscount'] ?>">
-                  <input type="submit" name="coupon" class="btn hvr-hover" style="color: #fff;" value="USE COUPON">
-                </form>
-              </div>
-            </div>
-          <?php } else {
-          } ?>
-        <?php } ?>
+            <?php } else {
+            } ?>
+          <?php } ?>
+        </div>
+
 
         <div class="col-lg-4 col-sm-12">
           <div class="order-box">

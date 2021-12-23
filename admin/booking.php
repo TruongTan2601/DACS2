@@ -1,5 +1,7 @@
 <?php
 require 'connect.php';
+require 'libs/mailer.php';
+
 Session::checkSession();
 $tbl_reservation =  DB::table('tbl_reservations')->where('check_seen',0)->get();
 $tbl_reservations = DB::table('tbl_reservations')->where('check_seen',1)->get();
@@ -10,47 +12,25 @@ if (isset($_POST['accept'])) {
   $productS = DB::table('tbl_reservations')->find('Id', $productId);
 }
 
-require './includes/Exception.php';
-require './includes/PHPMailer.php';
-require './includes/SMTP.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
-
-$mail = new PHPMailer();
 if (isset($_POST['submit'])) {
   $id = $_POST['id'];
   $content = $_POST['content'];
   $email = $_POST['email'];
   $message = $_POST['message'];
   $picture = $_POST['picture'];
-
-  // var_dump($content);
-  $mail->isSMTP();
-  $mail->Host = "smtp.gmail.com";
-  $mail->SMTPAuth = "true";
-  $mail->SMTPSecure = "tls";
-  $mail->Port = "587";
-  $mail->Username = "truongtannauan@gmail.com";
-  $mail->Password = "q0942233975";
-  $mail->Subject = $content;
-  $mail->setFrom($email);
-  $mail->isHTML(true);
-  $mail->addAttachment($picture);
-  $mail->Body = $message;
-  $mail->addAddress($email);
-
-  if ($mail->Send()) {
+  
+  $mailer = new Mailer();
+  $filename= 'mailer_template/booking_mailer.php';
+  $mailer->template($filename, $content, ["username" => $email])->to($email);
+  
+  if ($mailer->send()) {
     echo '<script>
     alert("Email send ...");
   </script>';
-  DB::table('tbl_reservations')->where('Id',$id)->update(['check_seen' => 1]);
+  // DB::table('tbl_reservations')->where('Id',$id)->update(['check_seen' => 1]);
   } else {
     echo "Error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
   }
-
-  $mail->smtpClose();
 }
 
 ?>
@@ -132,7 +112,7 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-  <?= include 'modules/sidebar.php' ?>
+  <?php include 'modules/sidebar.php' ?>
   <section class="home-section">
     <div class="text"><span><i class="fas fa-couch"></i> New Booking</span></div>
     <div class="block">

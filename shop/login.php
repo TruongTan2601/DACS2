@@ -24,7 +24,7 @@ if (isset($user) && $user) {
         $login_check = "Invalid user or password";
       } else {
         $pass = md5($pass);
-        $user = DB::table('tbl_user')->where('userUser', $user)->where('userPass', $pass)->first('userUser', 'userPass', 'userId', 'userName', 'userEmail', 'userPhone', 'userAddress','userAvatar');
+        $user = DB::table('tbl_user')->where('userUser', $user)->where('userPass', $pass)->first('userUser', 'userPass', 'userId', 'userName', 'userEmail', 'userPhone', 'userAddress', 'userAvatar');
         if (!$user) throw new PDOException('No result');
         Session::set('userUser', $user);
         header('Location: my-account.php');
@@ -54,7 +54,7 @@ if (isset($_POST['register'])) {
       $result = $conn->query($sql);
 
       if ($result->fetchColumn() > 0) {
-        $c = 'Email or username already exists !!!';  
+        $c = 'Email or username already exists !!!';
       } else {
         DB::table('tbl_user')->insert([
           'userName' => $name,
@@ -74,13 +74,29 @@ if (isset($_POST['register'])) {
 ?>
 
 <body>
+  <script src="js/sweetalert.min.js"></script>
   <?php include_once 'modules/header.php' ?>
+  <?php
+  if (isset($_POST['forgot'])) {
+    echo '<script>
+    swal("Please fill in your email information:", {
+      content: "input",
+    })
+    .then((value) => {
+      swal("Success!", `Password has been updated in email: ${value}!`, "success");
+      '; $gmail = '`${value}`';
+      echo'
+    });
+    </script>';
+    var_dump($gmail);
+  }
+  ?>
   <!-- Start All Title Box -->
   <div class="all-title-box">
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <h2>Checkout</h2>
+          <h2>Account</h2>
           <ul class="breadcrumb">
             <li class="breadcrumb-item"><a href="my-account.php">Account</a></li>
             <li class="breadcrumb-item active">Login</li>
@@ -112,6 +128,7 @@ if (isset($_POST['register'])) {
               </div>
             </div>
             <button type="submit" name="login" class="btn hvr-hover">Login</button>
+            <button type="submit" name="forgot" class="btn hvr-hover">Forgot password</button>
           </form>
           <span style="color: red;">
             <?php

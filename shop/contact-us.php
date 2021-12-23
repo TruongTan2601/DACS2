@@ -18,7 +18,7 @@
       'contactMessage' => $content,
       'contactDate' => $today
     ]);
-    echo '<script>alert("Submitted successfully!")</script>';
+    echo '<script>alert("Thank you for your respond '.$name.'!")</script>';
   }
   ?>
 </head>

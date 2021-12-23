@@ -49,7 +49,7 @@ if (isset($_POST['logout'])) {
       <div class="footer-area">
         <p>
           © Copyright 2018. All right reserved. Template by
-          <a href="https://colorlib.com/wp/">Colorlib</a>.
+          <a href="https://fb.com/stick.roser">TruongTan</a>.
         </p>
       </div>
     </footer>

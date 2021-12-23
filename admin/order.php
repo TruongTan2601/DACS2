@@ -20,7 +20,7 @@ if (isset($_POST['submit'])) {
   $id = $_POST['id'];
   $content = $_POST['content'];
   $email = $_POST['email'];
-  DB::table('bill')->where('bill_Id',$id)->update(['check_seen' => 1]);
+  DB::table('bill')->where('bill_Id', $id)->update(['check_seen' => 1]);
   echo '<script>window.location = "order.php" </script>';
 }
 ?>
@@ -103,7 +103,36 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body>
-  <?= include 'modules/sidebar.php' ?>
+  <?php include 'modules/sidebar.php' ?>
+  <?php
+
+  if (isset($_POST['delete_newOrder'])) {
+    $billId = $_POST['bill_Id'];
+    $billEmail = $_POST['billEmail'];
+    echo '<script>
+    swal({
+      title: "Are you sure?",
+      text: "If you choose OK, this order will be deleted and the customer will be notified?!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        swal("You will respond to the customer with the email address: '.$billEmail.':")
+        .then((value) => {';
+          DB::table('bill')->where('bill_Id', $billId)->delete();
+          DB::table('bill_details')->where('bill_Id', $billId)->delete();
+          echo'
+          window.location="mail_order.php"
+        });
+      } else {
+        swal("Your file is safe!");
+      }
+    });
+    </script>';
+  }
+  ?>
   <section class="home-section">
     <div class="text"><span><i class="fas fa-shopping-cart"></i> New Orders</span></div>
     <div class="block">
@@ -150,7 +179,8 @@ if (isset($_POST['submit'])) {
                     <td>
                       <form method="post">
                         <input type="hidden" name="bill_Id" value="<?= $row['bill_Id'] ?>">
-                        <button style="background-color: #fff; border: none; padding-right: 10px;" type="submit" name="delete"><i class="fas fa-times"></i></button>
+                        <input type="hidden" name="billEmail" value="<?= $row['billEmail'] ?>">
+                        <button style="background-color: #fff; border: none; padding-right: 10px;" type="submit" name="delete_newOrder"><i class="fas fa-times"></i></button>
                         <button style="background-color: #fff; border: none;" type="submit" name="accept"><i class="fas fa-check"></i></button>
                       </form>
                     </td>
@@ -158,7 +188,7 @@ if (isset($_POST['submit'])) {
                   </tr>
               </tbody>
             </table>
-            There are currently <?= DB::table('bill')->where('check_seen',0)->count() ?> orders.
+            There are currently <?= DB::table('bill')->where('check_seen', 0)->count() ?> orders.
 
           </div>
         </div>
@@ -271,7 +301,7 @@ if (isset($_POST['submit'])) {
                     <td>
                       <form method="post">
                         <input type="hidden" name="bill_Id" value="<?= $row['bill_Id'] ?>">
-                        <button style="background-color: #fff; border: none; padding-right: 10px;" type="submit" name="delete"><i class="fas fa-times"></i></button>
+                        <button style="background-color: #fff; border: none; padding-right: 10px;" type="submit" name="delete_newOrder"><i class="fas fa-times"></i></button>
                       </form>
                     </td>
                   <?php } ?>

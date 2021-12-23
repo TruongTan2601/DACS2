@@ -106,7 +106,7 @@ $stmt = DB::table('cmt_blogs')->limit(5)->orderBy('cmt_Id', 'DESC')->where('blog
                 </div>
                 <span class="gap">|</span>
                 <div class="post-comment-count">
-                  <a href="#">8 Comments</a>
+                  <a href="#"><?= DB::table('cmt_blogs')->where('blogId', $blogId)->count() ?> Comments</a>
                 </div>
               </div>
               <div class="post-content">
@@ -192,7 +192,7 @@ $stmt = DB::table('cmt_blogs')->limit(5)->orderBy('cmt_Id', 'DESC')->where('blog
                 <?php foreach ($tbl_blog as $row) { ?>
                   <div class="blog-item">
                     <div class="content">
-                      <h6 class="post-title"><a href="blog-detail.php?id=<?= $row['blogId'] ?>"><?= $row['blogName'] ?></a></h6>
+                      <h6 class="post-title"><b><a href="blog-detail.php?id=<?= $row['blogId'] ?>"><?= $row['blogName'] ?></a></b></h6>
                       <div class="meta">
                         <a href="#"><span class="mai-calendar"></span> <?= $row['blogUpDate'] ?></a>
                         <a href="#"><span class="mai-person"></span> Admin</a>

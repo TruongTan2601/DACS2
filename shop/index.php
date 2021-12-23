@@ -100,12 +100,16 @@
 </head>
 
 <body>
+
+<script src="js/sweetalert.min.js"></script>
   <?php include 'modules/header.php' ?>
   <?php
   $tbl_banner = DB::table('tbl_banner')->get();
   $tbl_blogs = DB::table('tbl_blogs')->get();
   if (isset($_POST['reservation'])) {
-    echo '<script>alert("Reservation successfully!!!")</script>';
+    echo '<script>
+      swal("Successful Booking!", "Thank you for booking with us!", "success");
+  </script>';
     $name = $_POST['full_name'];
     $days = $_POST['days'];
     $hours = $_POST['hours'];
@@ -131,7 +135,6 @@
     }
   }
   ?>
-
   <!-- Start Slider -->
   <div id="slides-shop" class="cover-slides">
     <ul class="slides-container">
@@ -221,7 +224,7 @@
 
           <div class="form-row">
             <input type="number" placeholder="How Many Persons?" min="1" max="30" name="people" required required_msg="Please select the number of people!">
-            <input type="submit" name="reservation" value="BOOK TABLE" />
+            <input type="submit" name="reservation" onclick="executeExample()" value="BOOK TABLE" />
           </div>
         </form>
       </div>

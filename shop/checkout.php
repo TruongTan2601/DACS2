@@ -4,15 +4,23 @@
 
 <head>
   <?php require 'modules/head.php' ?>
+  <script src="js/sweetalert.min.js"></script>
   <?php
   $user = Session::get("userUser");
   if (isset($user) && $user) {
-    $q=0;
+    $q = 0;
     $cart = DB::table('cart')->where('userId', $user['userId'])->get();
-    if ($cart[$q]== "") {
-      echo '<script>alert("Cart your empty!!! Back to sidebar shop!!!"); window.location="shop.php";</script>';
+
+    if (empty($cart)) {
+      echo '<div></div>
+      <script>
+      swal("Cart your empty!!! Back to sidebar shop!!!")
+      .then((value) => {
+        window.location ="shop.php";
+      });
+      </script>';
     }
-  }else{
+  } else {
     header('Location: login.php');
   }
 
@@ -21,6 +29,7 @@
 
   if (isset($_POST['place_order'])) {
     $billName = $_POST['name'];
+    $billEmail = $_POST['email'];
     $billDate = $_POST['date'];
     $billPhone = $_POST['phone'];
     $address = $_POST['address'] . ', ' . $_POST['ward'] . ', ' . $_POST['state'] . ', ' . $_POST['country'];
@@ -28,17 +37,18 @@
     $subtotal = 0;
     foreach ($cart as $row) {
       $total = $row['cartPrice'] * $row['cartQuantity'];
-      $subtotal +=$total;
+      $subtotal += $total;
     }
 
     DB::table('bill')->insert([
       'userId' =>  $user['userId'],
       'billName' => $billName,
+      'billEmail'=>$billEmail,
       'billDate' => $billDate,
       'billAddress' => $address,
       'billPhone' => $billPhone,
-      'subtotal' => $subtotal*(100-$row['coupon'])/100,
-      'month' =>$month,
+      'subtotal' => $subtotal * (100 - $row['coupon']) / 100,
+      'month' => $month,
       'coupon' => $row['coupon']
     ]);
 
@@ -54,19 +64,21 @@
         'productPrice' => $row['cartPrice'],
         'productQuantity' => $row['cartQuantity'],
         'total' => $total,
-        'month' =>$month
+        'month' => $month
       ]);
     }
     DB::table('cart')->where('userId', $user['userId'])->delete();
-    echo '<script>alert("Thanks for your order!!!");window.location="index.php"</script>';
+    echo '<div></div><script>
+    swal("Successful Order!", "Thank you for your order!", "success")
+    .then((value) => {
+      window.location ="index.php";
+    });</script>';
   }
-  
   ?>
 </head>
 
 <body>
   <?php include 'modules/header.php' ?>
-<script>swal("Hello world!");</script>
   <!-- Start All Title Box -->
   <div class="all-title-box">
     <div class="container">
@@ -100,7 +112,7 @@
               </div>
               <div class="mb-3">
                 <label for="email">Email Address *</label>
-                <input type="email" class="form-control" id="email" value="<?= $user['userEmail'] ?>" required>
+                <input type="email" class="form-control" id="email" name="email" value="<?= $user['userEmail'] ?>" required>
                 <div class="invalid-feedback"> Please enter a valid email address for shipping updates. </div>
               </div>
               <div class="mb-3">
@@ -281,7 +293,7 @@
                   </div>
                   <div class="d-flex">
                     <h4>Discount</h4>
-                    <div class="ml-auto font-weight-bold"> <?= $discount = $subtotal *  $row['coupon']/100 ?> VNĐ </div>
+                    <div class="ml-auto font-weight-bold"> <?= $discount = $subtotal *  $row['coupon'] / 100 ?> VNĐ </div>
                   </div>
                   <hr class="my-1">
                   <div class="d-flex">
@@ -427,8 +439,8 @@
   <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
   <!-- ALL JS FILES -->
-    <script src="js/jquery-3.2.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
+  <script src="js/jquery-3.2.1.min.js"></script>
+  <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <!-- ALL PLUGINS -->
   <script src="js/jquery.superslides.min.js"></script>

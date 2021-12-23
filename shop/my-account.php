@@ -456,7 +456,7 @@ if (isset($_POST['logout'])) {
                 <th><?= $row['billDate'] ?></th>
                 <th><?= $row['billAddress'] ?></th>
                 <th><?= $row['billPhone'] ?></th>
-                <th><?= $row['subtotal'] ?></th>
+                <th><?= number_format($row['subtotal']) ?></th>
                 <td>
                   <form method="post">
                     <input type="hidden" name="bill_Id" value="<?= $row['bill_Id'] ?>">

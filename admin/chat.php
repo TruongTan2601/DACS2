@@ -10,34 +10,18 @@ if (isset($_POST['accept'])) {
   $productS = DB::table('contact')->find('contactId', $productId);
 }
 
-require './includes/Exception.php';
-require './includes/PHPMailer.php';
-require './includes/SMTP.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
-
-$mail = new PHPMailer();
+require 'modules/mailer.php';
 if (isset($_POST['submit'])) {
   $id = $_POST['id'];
   $content = $_POST['content'];
   $email = $_POST['email'];
   $message = $_POST['message'];
-  $picture = $_POST['picture'];
 
   // var_dump($content);
-  $mail->isSMTP();
-  $mail->Host = "smtp.gmail.com";
-  $mail->SMTPAuth = "true";
-  $mail->SMTPSecure = "tls";
-  $mail->Port = "587";
-  $mail->Username = "truongtannauan@gmail.com";
-  $mail->Password = "q0942233975";
   $mail->Subject = $content;
   $mail->setFrom($email);
   $mail->isHTML(true);
-  $mail->addAttachment($picture);
+  $mail->addAttachment('img/logotre.jpg');
   $mail->Body = $message;
   $mail->addAddress($email);
 
@@ -206,12 +190,6 @@ if (isset($_POST['submit'])) {
                   <textarea class="form-control" type="textarea" name="message" id="message" maxlength="6000" rows="7"></textarea>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-sm-12 form-group">
-                  <input type="file" class="form-control" name="picture" id="file">
-                </div>
-              </div>
-
               <div class="row">
                 <div class="col-sm-12 form-group">
                   <button type="submit" class="btn btn-lg btn-default pull-right" name="submit" style="border: 1px solid">Send →</button>

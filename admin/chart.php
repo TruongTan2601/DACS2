@@ -30,8 +30,6 @@ Session::checkSession();
           </div>
         </div>
       </div>
-
-
     </div>
   </section>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"> </script>
@@ -57,15 +55,15 @@ Session::checkSession();
       datasets: [{
           label: 'Black coffee',
           data: [
-            <?= DB::table('bill_details')->where('month', 1)->where('productName', 'Black coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 2)->where('productName', 'Black coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 3)->where('productName', 'Black coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 4)->where('productName', 'Black coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 5)->where('productName', 'Black coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 6)->where('productName', 'Black coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 7)->where('productName', 'Black coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 8)->where('productName', 'Black coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 9)->where('productName', 'Black coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 2)->where( 'productName', 'Black coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 3)->where( 'productName', 'Black coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 4)->where( 'productName', 'Black coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 5)->where( 'productName', 'Black coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 1)->where( 'productName', 'Black coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 6)->where( 'productName', 'Black coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 7)->where( 'productName', 'Black coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 8)->where( 'productName', 'Black coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 9)->where( 'productName', 'Black coffee')->sum('productQuantity') ?>,
             <?= DB::table('bill_details')->where('month', 10)->where('productName', 'Black coffee')->sum('productQuantity') ?>,
             <?= DB::table('bill_details')->where('month', 11)->where('productName', 'Black coffee')->sum('productQuantity') ?>,
             <?= DB::table('bill_details')->where('month', 12)->where('productName', 'Black coffee')->sum('productQuantity') ?>
@@ -109,15 +107,15 @@ Session::checkSession();
         {
           label: 'Milk coffee',
           data: [
-            <?= DB::table('bill_details')->where('month', 1)->where('productName', 'Milk coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 2)->where('productName', 'Milk coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 3)->where('productName', 'Milk coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 4)->where('productName', 'Milk coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 5)->where('productName', 'Milk coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 6)->where('productName', 'Milk coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 7)->where('productName', 'Milk coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 8)->where('productName', 'Milk coffee')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 9)->where('productName', 'Milk coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 1)->where( 'productName', 'Milk coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 2)->where( 'productName', 'Milk coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 3)->where( 'productName', 'Milk coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 4)->where( 'productName', 'Milk coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 5)->where( 'productName', 'Milk coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 6)->where( 'productName', 'Milk coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 7)->where( 'productName', 'Milk coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 8)->where( 'productName', 'Milk coffee')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 9)->where( 'productName', 'Milk coffee')->sum('productQuantity') ?>,
             <?= DB::table('bill_details')->where('month', 10)->where('productName', 'Milk coffee')->sum('productQuantity') ?>,
             <?= DB::table('bill_details')->where('month', 11)->where('productName', 'Milk coffee')->sum('productQuantity') ?>,
             <?= DB::table('bill_details')->where('month', 12)->where('productName', 'Milk coffee')->sum('productQuantity') ?>
@@ -154,15 +152,15 @@ Session::checkSession();
         {
           label: 'Capuchino',
           data: [
-            <?= DB::table('bill_details')->where('month', 1)->where('productName', 'Capuchino')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 2)->where('productName', 'Capuchino')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 3)->where('productName', 'Capuchino')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 4)->where('productName', 'Capuchino')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 5)->where('productName', 'Capuchino')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 6)->where('productName', 'Capuchino')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 7)->where('productName', 'Capuchino')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 8)->where('productName', 'Capuchino')->sum('productQuantity') ?>,
-            <?= DB::table('bill_details')->where('month', 9)->where('productName', 'Capuchino')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 1)->where( 'productName', 'Capuchino')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 2)->where( 'productName', 'Capuchino')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 3)->where( 'productName', 'Capuchino')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 4)->where( 'productName', 'Capuchino')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 5)->where( 'productName', 'Capuchino')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 6)->where( 'productName', 'Capuchino')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 7)->where( 'productName', 'Capuchino')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 8)->where( 'productName', 'Capuchino')->sum('productQuantity') ?>,
+            <?= DB::table('bill_details')->where('month', 9)->where( 'productName', 'Capuchino')->sum('productQuantity') ?>,
             <?= DB::table('bill_details')->where('month', 10)->where('productName', 'Capuchino')->sum('productQuantity') ?>,
             <?= DB::table('bill_details')->where('month', 11)->where('productName', 'Capuchino')->sum('productQuantity') ?>,
             <?= DB::table('bill_details')->where('month', 12)->where('productName', 'Capuchino')->sum('productQuantity') ?>
