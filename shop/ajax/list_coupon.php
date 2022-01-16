@@ -1,7 +1,7 @@
 <?php
 include_once '../../admin/connect.php';
 $s = $_POST['data'];
-$sql = DB::table('coupon')->where('couponName', 'like', "%$s%")->get();
+$sql = DB::table('coupon')->where('couponName', 'like', "%$s%")->orWhere('show_check',1)->get();
 
 ?>
 <?php foreach ($sql as $row) { ?>

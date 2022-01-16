@@ -4,6 +4,36 @@
 
 <head>
   <?php include_once 'modules/head.php' ?>
+  <style>
+    .x-display-hide {
+      display: block;
+    }
+
+    .x-display {
+      display: block;
+    }
+
+    .modal {
+      position: fixed;
+      z-index: 3;
+      padding-top: 100px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0, 0, 0);
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 100px auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 20%;
+    }
+  </style>
 </head>
 
 <?php
@@ -74,7 +104,9 @@ if (isset($_POST['register'])) {
 ?>
 
 <body>
-  <script src="js/sweetalert.min.js"></script>
+  <script src="js/sweetalert.min.js">
+
+  </script>
   <?php include_once 'modules/header.php' ?>
   <?php
   if (isset($_POST['forgot'])) {
@@ -84,8 +116,9 @@ if (isset($_POST['register'])) {
     })
     .then((value) => {
       swal("Success!", `Password has been updated in email: ${value}!`, "success");
-      '; $gmail = '`${value}`';
-      echo'
+      ';
+    $gmail = '`${value}`';
+    echo '
     });
     </script>';
     var_dump($gmail);
@@ -128,7 +161,7 @@ if (isset($_POST['register'])) {
               </div>
             </div>
             <button type="submit" name="login" class="btn hvr-hover">Login</button>
-            <button type="submit" name="forgot" class="btn hvr-hover">Forgot password</button>
+            <button onclick="testPromptDialog()" class="btn hvr-hover">Forgot password</button>
           </form>
           <span style="color: red;">
             <?php
@@ -177,6 +210,7 @@ if (isset($_POST['register'])) {
     </div>
   </div>
   <!-- End Cart -->
+
 
   <!-- Start Instagram Feed  -->
   <div class="instagram-box">
@@ -273,6 +307,30 @@ if (isset($_POST['register'])) {
   <a href="#" id="back-to-top" title="Back to top" style="display: none;">&uarr;</a>
 
   <!-- ALL JS FILES -->
+  <script>
+    var getId = document.getElementById("show_form");
+    var editClose = document.getElementById("edit-close");
+    if (getId) {
+      editClose.onclick() = function() {
+        getId.classList.add("x-display-hide");
+        getId.classList.remove("x-display");
+      }
+    }
+
+    function testPromptDialog() {
+
+      var result = prompt("Enter your email:", "@gmail.com");
+
+      if (result != null) {
+        var conf = confirm("Your email is " + result);
+        if (conf) {
+          alert("OK Next lesson!");
+        } else {
+          alert("Bye!");
+        }
+      }
+    }
+  </script>
   <script src="js/jquery-3.2.1.min.js"></script>
   <script src="js/popper.min.js"></script>
   <script src="js/bootstrap.min.js"></script>

@@ -101,7 +101,7 @@
 
 <body>
 
-<script src="js/sweetalert.min.js"></script>
+  <script src="js/sweetalert.min.js"></script>
   <?php include 'modules/header.php' ?>
   <?php
   $tbl_banner = DB::table('tbl_banner')->get();
@@ -197,7 +197,7 @@
         <h3>Reservation</h3>
         <form method="POST">
           <div class="form-row">
-            <input type="date" name="days" required required_msg="Please check this box!">
+            <input type="date" id="date" name="days" required required_msg="Please check this box!">
 
             <select name="hours" required required_msg="Please check this box!">
               <option value="">Select Hour</option>
@@ -456,6 +456,11 @@
         };
       }
     })
+    $(function() {
+      $('#date').datepicker({
+        minDate: 0
+      });
+    });
   </script>
 
 

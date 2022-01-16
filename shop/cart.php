@@ -174,7 +174,7 @@
       <div class="row my-5">
 
         <div class="col-lg-8 col-sm-12 list_coupon" style="padding-bottom: 20px;">
-          <?php foreach (DB::table('coupon')->get() as $row) { ?>
+          <?php foreach (DB::table('coupon')->orWhere('show_check',0)->get() as $row) { ?>
             <?php $times = floor((time() - strtotime($row['couponEndDate'])) / (60 * 60 * 24)) ?>
             <?php if ($times <= 0) { ?>
               <div class="row coupon_s" style="padding-bottom: 20px;">
